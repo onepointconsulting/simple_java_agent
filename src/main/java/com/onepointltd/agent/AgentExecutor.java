@@ -19,13 +19,13 @@ public class AgentExecutor {
   public static final String PAUSE = "PAUSE";
 
   public static final String TOOL = "Tool";
-  public static final String ANSWER = "Answer";
+  public static final String ANSWER = "Answer:";
 
-  private final Tool[] tools;
+  final Tool[] tools;
 
-  private final Client client;
+  final Client client;
 
-  private final int maxIterations;
+  final int maxIterations;
 
   public AgentExecutor(Client client, Tool[] tools, int maxIterations) {
     this.client = client;
@@ -33,7 +33,7 @@ public class AgentExecutor {
     this.maxIterations = maxIterations;
   }
 
-  private Optional<ToolCall> extractAction(String content) {
+  Optional<ToolCall> extractAction(String content) {
     // Define the regex pattern
     String regex = "Tool: (\\w+): (.+)";
 
@@ -55,7 +55,7 @@ public class AgentExecutor {
   }
 
   public String execute(String question) {
-    Agent agent = new Agent(client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name()));
+    Agent agent = initAgent();
     int iteration = 0;
     String nextPrompt = question;
     while (iteration < maxIterations) {
@@ -64,28 +64,46 @@ public class AgentExecutor {
       String content = response.content();
       iteration++;
       if (content.contains(PAUSE) && content.contains(TOOL)) {
-        Optional<ToolCall> optionalToolCall = extractAction(content);
-        if (optionalToolCall.isPresent()) {
-          ToolCall toolCall = optionalToolCall.get();
-          Optional<Tool> toolOptional = Arrays.stream(tools).filter(tool -> tool.name().equals(toolCall.toolName())).findFirst();
-          if(toolOptional.isPresent()) {
-            Tool tool = toolOptional.get();
-            nextPrompt = String.format("Observation: %s", tool.execute(toolCall.value()));
-            System.out.println(nextPrompt);
-          } else {
-            nextPrompt = String.format("Observation: Cannot find tool %s", toolCall.toolName());
-          }
-        } else {
-          return String.format("Failed to extract tool call %s", content);
-        }
-        continue;
+        nextPrompt = generateObservation(content);
       }
-      if (content.contains(ANSWER)) {
+      else if (content.contains(ANSWER)) {
         return content;
+      } else {
+        nextPrompt = "";
       }
-      nextPrompt = "";
     }
     return "Failed to find an answer";
+  }
+
+  String generateObservation(String content) {
+    String nextPrompt;
+    Optional<ToolCall> optionalToolCall = extractAction(content);
+    if (optionalToolCall.isPresent()) {
+      ToolCall toolCall = optionalToolCall.get();
+      Optional<Tool> toolOptional = findTool(toolCall);
+      if(toolOptional.isPresent()) {
+        Tool tool = toolOptional.get();
+        nextPrompt = produceObservation(toolCall, tool);
+        System.out.println(nextPrompt);
+      } else {
+        nextPrompt = String.format("Observation: Cannot find tool %s", toolCall.toolName());
+      }
+    } else {
+      nextPrompt = String.format("Failed to extract tool call %s", content);
+    }
+    return nextPrompt;
+  }
+
+  static String produceObservation(ToolCall toolCall, Tool tool) {
+    return String.format("Observation: %s", tool.execute(toolCall.value()));
+  }
+
+  Optional<Tool> findTool(ToolCall toolCall) {
+    return Arrays.stream(tools).filter(tool -> tool.name().equals(toolCall.toolName())).findFirst();
+  }
+
+  Agent initAgent() {
+    return new Agent(client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name()));
   }
 
   public static void main(String[] args) {

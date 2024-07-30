@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 
 public class Wikipedia extends AbstractTool {
 
+  public static final String NAME = "wikipedia";
+
   public static final String ENDPOINT = "https://en.wikipedia.org/w/api.php?";
 
   private final Config config;
@@ -73,7 +75,7 @@ public class Wikipedia extends AbstractTool {
 
   @Override
   public String name() {
-    return "wikipedia";
+    return NAME;
   }
 
   @Override

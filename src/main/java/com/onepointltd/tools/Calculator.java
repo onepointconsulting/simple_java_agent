@@ -10,9 +10,11 @@ import java.util.logging.Level;
 
 public class Calculator extends AbstractTool {
 
+  public static final String NAME = "calculator";
+
   @Override
   public String name() {
-    return "calculator";
+    return NAME;
   }
 
   @Override

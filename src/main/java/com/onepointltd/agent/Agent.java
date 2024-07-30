@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class Agent {
-  private final Client client;
+  final Client client;
 
-  private final List<Message> messages = new ArrayList<>();
+  final List<Message> messages = new ArrayList<>();
 
   public Agent(Client client, String systemMessage) {
     this.client = client;
@@ -30,8 +30,8 @@ public class Agent {
     return result;
   }
 
-  private Message execute() {
-    Response response = this.client.completions(messages);
+  Message execute() {
+    Response response = this.client.completions(messages, null);
     Optional<Message> optionalMessage = MessageExtraction.extract(response);
     return optionalMessage.orElse(new Message(Roles.ASSISTANT, "Failed to process your message"));
   }

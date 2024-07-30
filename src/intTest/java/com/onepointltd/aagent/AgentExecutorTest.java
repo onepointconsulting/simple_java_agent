@@ -1,5 +1,7 @@
 package com.onepointltd.aagent;
 
+import static com.onepointltd.provider.QuestionProvider.QUESTION_OLYMPIC;
+
 import com.onepointltd.agent.AgentExecutor;
 import com.onepointltd.client.Groq;
 import com.onepointltd.config.Config;
@@ -13,8 +15,7 @@ public class AgentExecutorTest {
 
   @Test
   public void whenOlympicGames_ShouldBeParis() {
-    String question = "Who is hosting the Olympic Games this year and who will be the host next time?";
-    runAgent(question);
+    runAgent(QUESTION_OLYMPIC);
   }
 
   @Test

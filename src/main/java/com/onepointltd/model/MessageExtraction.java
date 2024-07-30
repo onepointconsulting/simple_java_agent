@@ -6,6 +6,9 @@ import java.util.Optional;
 
 public class MessageExtraction {
 
+  private static final List<String> EXPECTED_KEYS = List.of("choices", "message", "function_call");
+
+  @SuppressWarnings("unchecked")
   public static Optional<Message> extract(Response response) {
     if (response.statusCode() != 200) {
       return Optional.empty();
@@ -31,9 +34,18 @@ public class MessageExtraction {
       return Optional.empty();
     }
     Map<String, Object> message = (Map<String, Object>) choice.get("message");
-    if(!message.containsKey("role") || !message.containsKey("content")) {
-      return Optional.empty();
+    if(EXPECTED_KEYS.stream().anyMatch(key -> !message.containsKey(key))) {
+      if(message.containsKey("content")) {
+        return Optional.of(new Message((String) message.get("role"), (String) message.get("content")));
+      }
+      else if(message.containsKey("function_call")) {
+        // Should be function call
+        Map<String, Object> functionCallMap = (Map<String, Object>) message.get("function_call");
+        String name = (String) functionCallMap.get("name");
+        String arguments = (String) functionCallMap.get("arguments");
+        return Optional.of(new Message((String) message.get("role"), new FunctionCall(name, arguments)));
+      }
     }
-    return Optional.of(new Message((String) message.get("role"), (String) message.get("content")));
+    return Optional.empty();
   }
 }

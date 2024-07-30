@@ -4,21 +4,21 @@ import static com.onepointltd.config.Logging.logger;
 
 import com.onepointltd.config.Config;
 import com.onepointltd.model.DuckDuckGoResult;
-import com.onepointltd.model.MessagesSerializer;
+import com.onepointltd.model.Serializer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 
 public class DuckDuckGo extends AbstractTool {
+
+  public static final String NAME = "duckduckgo";
 
   private static final String DUCKDUCKGO_ENDPOINT = "https://duckduckgo.com/html/";
 
@@ -48,7 +48,7 @@ public class DuckDuckGo extends AbstractTool {
       String responseBody = new String(response.body(), StandardCharsets.UTF_8);
 
       List<DuckDuckGoResult> results = DuckDuckGoExtractor.extract(responseBody);
-      return MessagesSerializer.toJson(results);
+      return Serializer.toJson(results);
     } catch (IOException e) {
       logger.log(Level.SEVERE, "Failed to communicate with server", e);
       return e.getMessage();
@@ -60,7 +60,7 @@ public class DuckDuckGo extends AbstractTool {
 
   @Override
   public String name() {
-    return "duckduckgo";
+    return NAME;
   }
 
   @Override
