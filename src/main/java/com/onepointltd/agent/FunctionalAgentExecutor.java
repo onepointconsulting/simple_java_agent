@@ -8,6 +8,7 @@ import com.onepointltd.model.FunctionCall;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.ResponseDeserializer;
 import com.onepointltd.model.ToolCall;
+import com.onepointltd.model.ToolField;
 import com.onepointltd.prompts.SystemMessageGenerator;
 import com.onepointltd.tools.Calculator;
 import com.onepointltd.tools.DuckDuckGo;
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 public class FunctionalAgentExecutor extends AgentExecutor {
 
@@ -32,18 +32,20 @@ public class FunctionalAgentExecutor extends AgentExecutor {
 
   @Override
   Agent initAgent() {
-    List<Function> functions = Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).collect(Collectors.toList());
-    return new FunctionalAgent(super.client, SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name()), functions);
+    List<Function> functions = Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).toList();
+    List<ToolField> tools = functions.stream().map(ToolField::new).toList();
+    return new FunctionalAgent(super.client, SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name()), tools);
   }
 
   public String execute(String question) {
     Agent agent = initAgent();
     int iteration = 0;
     String nextPrompt = question;
+    FunctionCall functionCall = null;
     while (iteration < maxIterations) {
-      Message response = agent.call(nextPrompt);
+      Message response = agent.call(nextPrompt, functionCall);
       System.out.println(response);
-      FunctionCall functionCall = response.functionCall();
+      functionCall = response.functionCall();
       String content = response.content();
       iteration++;
       if (functionCall != null) {

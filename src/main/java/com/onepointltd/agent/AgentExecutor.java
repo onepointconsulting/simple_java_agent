@@ -58,8 +58,9 @@ public class AgentExecutor {
     Agent agent = initAgent();
     int iteration = 0;
     String nextPrompt = question;
+
     while (iteration < maxIterations) {
-      Message response = agent.call(nextPrompt);
+      Message response = agent.call(nextPrompt, null);
       System.out.println(response);
       String content = response.content();
       iteration++;

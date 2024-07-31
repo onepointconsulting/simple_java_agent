@@ -1,6 +1,6 @@
 package com.onepointltd.model;
 
-public record FunctionCall(String name, String arguments) {
+public record FunctionCall(String name, String arguments, String id) {
   public FunctionCall {
     if (name == null) {
       throw new IllegalArgumentException("name cannot be null");

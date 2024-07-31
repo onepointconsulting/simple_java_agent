@@ -7,6 +7,7 @@ import java.util.Optional;
 public class MessageExtraction {
 
   private static final List<String> EXPECTED_KEYS = List.of("choices", "message", "function_call");
+  public static final String TOOL_CALLS = "tool_calls";
 
   @SuppressWarnings("unchecked")
   public static Optional<Message> extract(Response response) {
@@ -38,12 +39,23 @@ public class MessageExtraction {
       if(message.containsKey("content")) {
         return Optional.of(new Message((String) message.get("role"), (String) message.get("content")));
       }
-      else if(message.containsKey("function_call")) {
+      else if(message.containsKey(TOOL_CALLS)) {
         // Should be function call
-        Map<String, Object> functionCallMap = (Map<String, Object>) message.get("function_call");
-        String name = (String) functionCallMap.get("name");
-        String arguments = (String) functionCallMap.get("arguments");
-        return Optional.of(new Message((String) message.get("role"), new FunctionCall(name, arguments)));
+        List<Map<String, Object>> toolCallsList = (List<Map<String, Object>>) message.get(TOOL_CALLS);
+        if(toolCallsList.isEmpty()) {
+          return Optional.empty();
+        }
+        // TODO: Handle multiple tool calls and not just the first one.
+        Map<String, Object> toolObject = toolCallsList.get(0);
+        String id = (String) toolObject.get("id");
+        String type = (String) toolObject.get("type"); // Should be "function"
+        if(!"function".equals(type)) {
+          return Optional.empty();
+        }
+        Map<String, Object> functionObject = (Map<String, Object>) toolObject.get("function");
+        String name = (String) functionObject.get("name");
+        String arguments = (String) functionObject.get("arguments");
+        return Optional.of(new Message((String) message.get("role"), new FunctionCall(name, arguments, id)));
       }
     }
     return Optional.empty();

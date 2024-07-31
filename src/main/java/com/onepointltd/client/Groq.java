@@ -4,11 +4,11 @@ import static com.onepointltd.config.Logging.logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.onepointltd.config.Config;
-import com.onepointltd.model.Function;
 import com.onepointltd.model.Message;
-import com.onepointltd.model.Serializer;
 import com.onepointltd.model.Response;
 import com.onepointltd.model.ResponseDeserializer;
+import com.onepointltd.model.Serializer;
+import com.onepointltd.model.ToolField;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -36,7 +36,7 @@ public class Groq implements Client {
   "model": "%s",
   "messages": %s,
   "stream": false,
-  "functions": %s
+  "tools": %s
 }
       """;
 
@@ -46,10 +46,10 @@ public class Groq implements Client {
     this.config = config;
   }
 
-  public Response completions(List<Message> messages, List<Function> functions) {
+  public Response completions(List<Message> messages, List<ToolField> tools) {
     HttpClient client = HttpClient.newHttpClient();
     try {
-      String jsonBody = createBody(messages, functions);
+      String jsonBody = createBody(messages, tools);
       HttpRequest request = HttpRequest.newBuilder()
           .uri(URI.create(GROQ_ENDPOINT))
           .timeout(Duration.ofSeconds(config.getTimeout()))
@@ -72,11 +72,11 @@ public class Groq implements Client {
     }
   }
 
-  public String createBody(List<Message> messages, List<Function> functions) {
+  public String createBody(List<Message> messages, List<ToolField> tools) {
     String messagesJson = Serializer.toJson(messages).replace("functionCall", "function_call");
-    if(functions != null && !functions.isEmpty()) {
-      String functionJson = Serializer.toJson(functions);
-      return String.format(FUNCTION_TEMPLATE, config.getModelName(), messagesJson, functionJson);
+    if(tools != null && !tools.isEmpty()) {
+      String toolsJson = Serializer.toJson(tools);
+      return String.format(FUNCTION_TEMPLATE, config.getModelName(), messagesJson, toolsJson);
     } else {
       return String.format(TEMPLATE, config.getModelName(), messagesJson);
     }

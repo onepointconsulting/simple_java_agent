@@ -85,7 +85,7 @@ public class Wikipedia extends AbstractTool {
 
   @Override
   public String description() {
-    return "Returns the Wikipedia page summary for the given search term.";
+    return "Returns the Wikipedia page summary for the given search term. Useful for retrieval of historical information.";
   }
 
 }

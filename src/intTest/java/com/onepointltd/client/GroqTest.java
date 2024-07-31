@@ -12,9 +12,11 @@ import com.onepointltd.model.ParameterType;
 import com.onepointltd.model.Parameters;
 import com.onepointltd.model.PropertyValue;
 import com.onepointltd.model.Response;
+import com.onepointltd.model.ToolField;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 public class GroqTest {
@@ -29,7 +31,7 @@ public class GroqTest {
   }
 
   private void processGroq(Message inputMessage, Function function) {
-    Response response = groq.completions(List.of(inputMessage), function == null ? null : List.of(function));
+    Response response = groq.completions(List.of(inputMessage), function == null ? null : Stream.of(function).map(ToolField::new).toList());
     assertNotNull(response);
     assertEquals(200, response.statusCode());
     Optional<Message> optionalMessage = MessageExtraction.extract(response);

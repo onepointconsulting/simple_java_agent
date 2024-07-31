@@ -1,6 +1,7 @@
 package com.onepointltd.agent;
 
 import com.onepointltd.client.Client;
+import com.onepointltd.model.FunctionCall;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.MessageExtraction;
 import com.onepointltd.model.Response;
@@ -21,9 +22,10 @@ public class Agent {
     }
   }
 
-  public Message call(String userMessage) {
-    if(userMessage != null && !userMessage.isBlank()) {
-      messages.add(new Message(Roles.USER, userMessage));
+  public Message call(String userMessage, FunctionCall functionCall) {
+    if (userMessage != null && !userMessage.isBlank()) {
+      boolean hasFunctionCall = functionCall != null;
+      messages.add(new Message(hasFunctionCall ? Roles.TOOL : Roles.USER, userMessage, null, hasFunctionCall ? functionCall.id() : null));
     }
     Message result = this.execute();
     messages.add(result);
