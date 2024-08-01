@@ -1,7 +1,6 @@
 package com.onepointltd.agent;
 
 import com.onepointltd.client.Client;
-import com.onepointltd.model.Function;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.MessageExtraction;
 import com.onepointltd.model.Response;

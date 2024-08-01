@@ -1,6 +1,6 @@
 package com.onepointltd.prompts;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.onepointltd.config.Config;
 import com.onepointltd.tools.DuckDuckGo;

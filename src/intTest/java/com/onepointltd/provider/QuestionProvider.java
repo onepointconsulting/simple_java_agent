@@ -17,4 +17,6 @@ public class QuestionProvider {
   public static final String QUESTION_MASS_EARTH_BY_2 = "What is the mass of the earth multiplied by 3?";
 
   public static final String QUESTION_SQUARE_ROOT = "Which is the square root of 3 multiplied by 10?";
+
+  public static final String QUESTION_EARTH_JUPITER_DIAMETERS = "What is the ratio between the diameter of the earth compared to the diameter of Jupiter?";
 }

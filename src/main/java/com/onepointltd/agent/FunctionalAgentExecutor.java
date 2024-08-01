@@ -4,7 +4,6 @@ import static com.onepointltd.config.Logging.logger;
 
 import com.onepointltd.client.Client;
 import com.onepointltd.model.Function;
-import com.onepointltd.model.FunctionCall;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.ResponseDeserializer;
 import com.onepointltd.model.ToolCall;
@@ -40,55 +39,63 @@ public class FunctionalAgentExecutor extends AgentExecutor {
   public String execute(String question) {
     Agent agent = initAgent();
     int iteration = 0;
-    String nextPrompt = question;
-    FunctionCall functionCall = null;
+    String[] nextPrompt = {question};
+    List<Map<String, Object>> toolCalls = null;
     while (iteration < maxIterations) {
-      Message response = agent.call(nextPrompt, functionCall);
+      Message response = agent.call(nextPrompt, toolCalls);
       System.out.println(response);
-      functionCall = response.functionCall();
+      toolCalls = response.toolCalls();
       String content = response.content();
       iteration++;
-      if (functionCall != null) {
-        nextPrompt = extractToolCall(functionCall);
+      if (toolCalls != null) {
+        nextPrompt = extractToolCalls(toolCalls);
       }
       else if (content.contains(ANSWER)) {
         return content;
       } else {
-        nextPrompt = "";
+        nextPrompt = new String[]{""};
       }
     }
     return "Failed to find an answer";
   }
 
-  private String extractToolCall(FunctionCall functionCall) {
-    String arguments = functionCall.arguments();
-    try {
-      Map<String, Object> args = ResponseDeserializer.deserialize(arguments);
-      ToolCall toolCall = null;
-      switch (functionCall.name()) {
-        case DuckDuckGo.NAME -> {
-          String search = args.get(FunctionalDuckDuckGo.SEARCH).toString();
-          toolCall = new ToolCall(DuckDuckGo.NAME, search);
+  @SuppressWarnings("unchecked")
+  private String[] extractToolCalls(List<Map<String, Object>> toolCalls) {
+    String[] returnToolCalls = new String[toolCalls.size()];
+    for (int i = 0; i < toolCalls.size(); i++) {
+      Map<String, Object> tool = toolCalls.get(i);
+      Map<String, Object> function = (Map<String, Object>) tool.get("function");
+      String name = (String) function.get("name");
+      String arguments = (String) function.get("arguments");
+      try {
+        Map<String, Object> args = ResponseDeserializer.deserialize(arguments);
+        ToolCall toolCall = null;
+        switch (name) {
+          case DuckDuckGo.NAME -> {
+            String search = args.get(FunctionalDuckDuckGo.SEARCH).toString();
+            toolCall = new ToolCall(DuckDuckGo.NAME, search);
+          }
+          case Wikipedia.NAME -> {
+            String search = args.get(FunctionalWikipedia.SEARCH).toString();
+            toolCall = new ToolCall(Wikipedia.NAME, search);
+          }
+          case Calculator.NAME -> {
+            String expression = args.get(FunctionalCalculator.EXPRESSION).toString();
+            toolCall = new ToolCall(Calculator.NAME, expression);
+          }
         }
-        case Wikipedia.NAME -> {
-          String search = args.get(FunctionalWikipedia.SEARCH).toString();
-          toolCall = new ToolCall(Wikipedia.NAME, search);
+        if (toolCall != null) {
+          Optional<Tool> toolOptional = findTool(toolCall);
+          if (toolOptional.isPresent()) {
+            returnToolCalls[i] = produceObservation(toolCall, toolOptional.get());
+          }
         }
-        case Calculator.NAME -> {
-          String expression = args.get(FunctionalCalculator.EXPRESSION).toString();
-          toolCall = new ToolCall(Calculator.NAME, expression);
-        }
+      } catch (Exception e) {
+        logger.log(Level.SEVERE, "Failed to extract tool call", e);
+        returnToolCalls[i] = "Observation: Failed to extract tool call";
       }
-      if(toolCall != null) {
-        Optional<Tool> toolOptional = findTool(toolCall);
-        if (toolOptional.isPresent()) {
-          return produceObservation(toolCall, toolOptional.get());
-        }
-      }
-    } catch (Exception e) {
-      logger.log(Level.SEVERE, "Failed to extract tool call", e);
     }
-    return "Observation: Cannot find tool to call";
+    return returnToolCalls;
   }
 
 }

@@ -34,9 +34,13 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
     implementation("org.junit-pioneer:junit-pioneer:2.2.0")
+    // Analyzing math expressions
     implementation("com.ezylang:EvalEx:3.3.0")
     // https://mvnrepository.com/artifact/org.jsoup/jsoup
     implementation("org.jsoup:jsoup:1.18.1")
+    // CLI parsing
+    // https://mvnrepository.com/artifact/commons-cli/commons-cli
+    implementation("commons-cli:commons-cli:1.8.0")
 
     intTestImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     intTestRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -1,6 +1,6 @@
 package com.onepointltd.model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;

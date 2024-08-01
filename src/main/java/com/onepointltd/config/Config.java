@@ -8,11 +8,15 @@ public class Config {
 
   public static final String TIMEOUT = "TIMEOUT";
 
+  public static final String MODEL_PROVIDER = "MODEL_PROVIDER";
+
   private final String apiKey;
 
-  private final String modelName;
+  private String modelName;
 
   private final int timeout;
+
+  private ModelProvider provider;
 
   public Config() {
     apiKey = System.getenv(API_KEY);
@@ -21,6 +25,12 @@ public class Config {
     checkExists(modelName, MODEL_NAME);
     timeout = Integer.parseInt(System.getenv(TIMEOUT));
     checkExists(timeout, TIMEOUT);
+    String providerVar = System.getenv(MODEL_PROVIDER);
+    if (providerVar == null) {
+      provider = ModelProvider.GROQ;
+    } else {
+      provider = ModelProvider.valueOf(providerVar.toUpperCase());
+    }
   }
 
   private <T> void checkExists(T value, String varname) {
@@ -40,5 +50,17 @@ public class Config {
 
   public int getTimeout() {
     return timeout;
+  }
+
+  public ModelProvider getProvider() {
+    return provider;
+  }
+
+  public void setModelName(String modelName) {
+    this.modelName = modelName;
+  }
+
+  public void setProvider(ModelProvider provider) {
+    this.provider = provider;
   }
 }

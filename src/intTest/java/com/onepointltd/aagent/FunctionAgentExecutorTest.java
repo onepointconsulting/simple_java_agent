@@ -1,5 +1,7 @@
 package com.onepointltd.aagent;
 
+import static com.onepointltd.aagent.AgentRunnerFunction.rungAgentGroq;
+import static com.onepointltd.provider.QuestionProvider.QUESTION_EARTH_JUPITER_DIAMETERS;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_MATH_EQUATION;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_NVIDIA_SHARE_PRICES;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_OLYMPIC;
@@ -21,42 +23,38 @@ public class FunctionAgentExecutorTest {
 
   @Test
   public void whenOlympicGames_ShouldBeParis() {
-    runAgent(QUESTION_OLYMPIC);
+    rungAgentGroq(QUESTION_OLYMPIC);
   }
 
   @Test
   public void whenNvidiaSharePrices_ShouldGiveResult() {
-    runAgent(QUESTION_NVIDIA_SHARE_PRICES);
+    rungAgentGroq(QUESTION_NVIDIA_SHARE_PRICES);
   }
 
   @Test
   public void whenWhoWasRulingPortugal_ShouldGiveResult() {
-    runAgent(QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010);
+    rungAgentGroq(QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010);
   }
 
   @Test
   public void whenWeatherLondonTomorrow_ShouldGiveAnswer() {
-    runAgent(QUESTION_WEATHER_LONDON_TOMORROW);
+    rungAgentGroq(QUESTION_WEATHER_LONDON_TOMORROW);
   }
 
   @Test
   public void whenCalculate_ShouldCalculate() {
-    runAgent(QUESTION_MATH_EQUATION);
+    rungAgentGroq(QUESTION_MATH_EQUATION);
   }
 
   @Test
   public void whenCalculateSquareRoot_ShouldCalculate() {
-    runAgent(QUESTION_SQUARE_ROOT);
+    rungAgentGroq(QUESTION_SQUARE_ROOT);
   }
 
-  private static void runAgent(String question) {
-    Config config = new Config();
-    System.out.printf("Model: %s%n", config.getModelName());
-    AgentExecutor agentExecutor = new FunctionalAgentExecutor(new Groq(config),
-        new FunctionalTool[]{new FunctionalDuckDuckGo(config), new FunctionalWikipedia(config), new FunctionalCalculator()}, 5);
-    String answer = agentExecutor.execute(question);
-    System.out.println("*****************************");
-    System.out.println(answer);
-    System.out.println("*****************************");
+  @Test
+  public void whenRationEarthJupiter_WithMassOfEarth() {
+    rungAgentGroq(QUESTION_EARTH_JUPITER_DIAMETERS);
   }
+
+
 }
