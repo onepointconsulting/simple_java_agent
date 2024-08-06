@@ -6,6 +6,7 @@ import com.onepointltd.client.Client;
 import com.onepointltd.client.Groq;
 import com.onepointltd.client.OpenAI;
 import com.onepointltd.config.Config;
+import com.onepointltd.config.Logging;
 import com.onepointltd.config.ModelProvider;
 import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
@@ -43,6 +44,7 @@ public class Main {
 
   public static void main(String[] args) {
 
+    Logging.initLogging();
     Options options = initOptions();
 
     // define parser
