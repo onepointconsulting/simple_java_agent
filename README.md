@@ -52,6 +52,10 @@ The timeout is in seconds.
 Please set the `JAVA_HOME` to Java 20 or higher and the Groq `API_KEY` environment variable and run the following command in the root folder after compiling the project:
 
 ```batch
+.\run.bat -p "<Some question>"
+```
+
+```bash
 .\run.bat "<Some question>"
 ```
 
@@ -60,6 +64,12 @@ Examples:
 ```batch
 .\run.bat -p "Who is the current UK Prime Minister?"
 ```
+
+```bash
+./run.sh "Who is Simone Biles?"
+```
+
+Note that for Linux you only send the prompt as argument to the shell script.
 
 The answer should show up in the console:
 
