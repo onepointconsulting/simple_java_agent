@@ -36,7 +36,7 @@ public class MessageExtraction {
     }
     Map<String, Object> message = (Map<String, Object>) choice.get("message");
     if(EXPECTED_KEYS.stream().anyMatch(key -> !message.containsKey(key))) {
-      if(message.containsKey("content")) {
+      if(message.containsKey("content") && message.get("content") != null) {
         return Optional.of(new Message((String) message.get("role"), (String) message.get("content")));
       }
       else if(message.containsKey(TOOL_CALLS)) {
@@ -45,17 +45,7 @@ public class MessageExtraction {
         if(toolCallsList.isEmpty()) {
           return Optional.empty();
         }
-        // TODO: Handle multiple tool calls and not just the first one.
-        Map<String, Object> toolObject = toolCallsList.get(0);
-        String id = (String) toolObject.get("id");
-        String type = (String) toolObject.get("type"); // Should be "function"
-        if(!"function".equals(type)) {
-          return Optional.empty();
-        }
-        Map<String, Object> functionObject = (Map<String, Object>) toolObject.get("function");
-        String name = (String) functionObject.get("name");
-        String arguments = (String) functionObject.get("arguments");
-        return Optional.of(new Message((String) message.get("role"), new FunctionCall(name, arguments, id)));
+        return Optional.of(new Message((String) message.get("role"), toolCallsList));
       }
     }
     return Optional.empty();

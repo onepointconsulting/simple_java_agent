@@ -23,8 +23,8 @@ public class Config {
     checkExists(apiKey, API_KEY);
     modelName = System.getenv(MODEL_NAME);
     checkExists(modelName, MODEL_NAME);
-    timeout = Integer.parseInt(System.getenv(TIMEOUT));
-    checkExists(timeout, TIMEOUT);
+    String timeoutStr = System.getenv(TIMEOUT);
+    timeout = Integer.parseInt(timeoutStr == null ? "60" : timeoutStr);
     String providerVar = System.getenv(MODEL_PROVIDER);
     if (providerVar == null) {
       provider = ModelProvider.GROQ;
@@ -62,5 +62,14 @@ public class Config {
 
   public void setProvider(ModelProvider provider) {
     this.provider = provider;
+  }
+  @Override
+  public String toString() {
+    return String.format("""
+MODEL_PROVIDER: %s
+API_KEY: %s
+MODEL_NAME: %s
+TIMEOUT: %d
+""", provider, apiKey, modelName, timeout);
   }
 }
