@@ -19,6 +19,10 @@ On Windows you can run the following script:
 .\build.bat
 ```
 
+```bash
+.\build.sh
+```
+
 You will need to set the JAVA_HOME to Java 20 or higher and run the `gradle jar` command.
 
 ```
