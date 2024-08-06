@@ -106,13 +106,4 @@ public class AgentExecutor {
   Agent initAgent() {
     return new Agent(client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name()));
   }
-
-  public static void main(String[] args) {
-    Config config = new Config();
-    AgentExecutor agentExecutor = new AgentExecutor(new Groq(config), new Tool[]{new DuckDuckGo(config), new Wikipedia(config)}, 5);
-    String answer = agentExecutor.execute("Who is hosting the Olimpic Games this year?");
-    System.out.println("*****************************");
-    System.out.println(answer);
-    System.out.println("*****************************");
-  }
 }

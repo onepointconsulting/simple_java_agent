@@ -51,6 +51,7 @@ public abstract class AbstractClient implements Client {
     HttpClient client = HttpClient.newHttpClient();
     try {
       String jsonBody = createBody(messages, tools);
+      logger.info("Sending request to " + this.endpoint + " with body: " + jsonBody);
       HttpRequest request = HttpRequest.newBuilder()
           .uri(URI.create(this.endpoint))
           .timeout(Duration.ofSeconds(config.getTimeout()))
