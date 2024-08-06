@@ -61,6 +61,7 @@ public abstract class AbstractClient implements Client {
           .build();
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       String body = response.body();
+      logger.info("Response body " + body);
       return new Response(response.statusCode(), body, ResponseDeserializer.deserialize(body));
     } catch (JsonProcessingException e) {
       logger.log(Level.SEVERE, "Failed to serialize messages", e);
