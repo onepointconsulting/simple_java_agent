@@ -1,5 +1,7 @@
 package com.onepointltd;
 
+import static com.onepointltd.config.Logging.logger;
+
 import com.onepointltd.agent.AgentExecutor;
 import com.onepointltd.agent.FunctionalAgentExecutor;
 import com.onepointltd.client.Client;
@@ -60,6 +62,7 @@ public class Main {
         return;
       }
       if (cmd.hasOption(PROMPT_OPTION)) {
+        logger.info("Starting agent");
         var question = cmd.getOptionValue(PROMPT_OPTION);
         var agentType = cmd.getOptionValue(AGENT_TYPE_OPTION, "plain");
         var maxIterations = Integer.parseInt(cmd.getOptionValue(MAX_ITERATIONS_OPTION, "6"));
