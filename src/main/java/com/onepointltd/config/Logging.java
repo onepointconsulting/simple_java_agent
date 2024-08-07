@@ -11,7 +11,6 @@ public class Logging {
 
   public static final Logger logger = Logger.getLogger(Logging.class.getName());
 
-
   public static void initLogging() {
     try {
       Handler fileHandler = new FileHandler("simple_agent.log", true); // Append to existing file

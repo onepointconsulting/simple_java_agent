@@ -13,7 +13,12 @@ public class FunctionalCalculator extends Calculator implements FunctionalTool {
   @Override
   public Function function() {
     Function function = new Function(super.name(), super.description());
-    Parameters parameters = new Parameters("object", Map.of(EXPRESSION, new PropertyValue("The expression used in the calculation", "string")), List.of("expression"));
+    Parameters parameters =
+        new Parameters(
+            "object",
+            Map.of(
+                EXPRESSION, new PropertyValue("The expression used in the calculation", "string")),
+            List.of("expression"));
     function.setParameters(parameters);
     return function;
   }

@@ -1,14 +1,10 @@
 package com.onepointltd.agent;
 
 import com.onepointltd.client.Client;
-import com.onepointltd.client.Groq;
-import com.onepointltd.config.Config;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.ToolCall;
 import com.onepointltd.prompts.SystemMessageGenerator;
-import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.Tool;
-import com.onepointltd.tools.Wikipedia;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -60,14 +56,13 @@ public class AgentExecutor {
     String nextPrompt = question;
 
     while (iteration < maxIterations) {
-      Message response = agent.call(new String[]{nextPrompt}, null);
+      Message response = agent.call(new String[] {nextPrompt}, null);
       System.out.println(response);
       String content = response.content();
       iteration++;
       if (content.contains(PAUSE) && content.contains(TOOL)) {
         nextPrompt = generateObservation(content);
-      }
-      else if (content.contains(ANSWER)) {
+      } else if (content.contains(ANSWER)) {
         return content;
       } else {
         nextPrompt = "";
@@ -82,7 +77,7 @@ public class AgentExecutor {
     if (optionalToolCall.isPresent()) {
       ToolCall toolCall = optionalToolCall.get();
       Optional<Tool> toolOptional = findTool(toolCall);
-      if(toolOptional.isPresent()) {
+      if (toolOptional.isPresent()) {
         Tool tool = toolOptional.get();
         nextPrompt = produceObservation(toolCall, tool);
         System.out.println(nextPrompt);

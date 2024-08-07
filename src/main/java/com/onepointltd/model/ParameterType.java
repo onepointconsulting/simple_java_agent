@@ -1,7 +1,6 @@
 package com.onepointltd.model;
 
 public enum ParameterType {
-
   STRING,
   INTEGER,
   BOOLEAN,

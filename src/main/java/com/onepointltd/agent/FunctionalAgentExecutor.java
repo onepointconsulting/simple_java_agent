@@ -31,9 +31,13 @@ public class FunctionalAgentExecutor extends AgentExecutor {
 
   @Override
   Agent initAgent() {
-    List<Function> functions = Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).toList();
+    List<Function> functions =
+        Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).toList();
     List<ToolField> tools = functions.stream().map(ToolField::new).toList();
-    return new FunctionalAgent(super.client, SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name()), tools);
+    return new FunctionalAgent(
+        super.client,
+        SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name()),
+        tools);
   }
 
   public String execute(String question) {
@@ -49,11 +53,10 @@ public class FunctionalAgentExecutor extends AgentExecutor {
       iteration++;
       if (toolCalls != null) {
         nextPrompt = extractToolCalls(toolCalls);
-      }
-      else if (content.contains(ANSWER)) {
+      } else if (content.contains(ANSWER)) {
         return content;
       } else {
-        nextPrompt = new String[]{""};
+        nextPrompt = new String[] {""};
       }
     }
     return "Failed to find an answer";
@@ -97,5 +100,4 @@ public class FunctionalAgentExecutor extends AgentExecutor {
     }
     return returnToolCalls;
   }
-
 }

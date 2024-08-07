@@ -1,7 +1,6 @@
 package com.onepointltd.agent;
 
 import com.onepointltd.client.Client;
-import com.onepointltd.model.FunctionCall;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.MessageExtraction;
 import com.onepointltd.model.Response;
@@ -25,13 +24,13 @@ public class Agent {
 
   public Message call(String[] userMessages, List<Map<String, Object>> toolCalls) {
     if (userMessages != null) {
-      for(int i = 0; i < userMessages.length; i++) {
+      for (int i = 0; i < userMessages.length; i++) {
         String userMessage = userMessages[i];
-        if(!userMessage.isBlank()) {
+        if (!userMessage.isBlank()) {
           boolean hasFunctionCall = toolCalls != null && !toolCalls.isEmpty();
           String id = hasFunctionCall ? (String) toolCalls.get(i).get("id") : null;
-          messages.add(new Message(hasFunctionCall ? Roles.TOOL : Roles.USER,
-              userMessage, null, id, null));
+          messages.add(
+              new Message(hasFunctionCall ? Roles.TOOL : Roles.USER, userMessage, null, id, null));
         }
       }
     }
@@ -45,6 +44,4 @@ public class Agent {
     Optional<Message> optionalMessage = MessageExtraction.extract(response);
     return optionalMessage.orElse(new Message(Roles.ASSISTANT, "Failed to process your message"));
   }
-
-
 }

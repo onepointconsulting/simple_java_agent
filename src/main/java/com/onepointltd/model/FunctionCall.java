@@ -9,5 +9,4 @@ public record FunctionCall(String name, String arguments, String id) {
       throw new IllegalArgumentException("arguments cannot be null");
     }
   }
-
 }

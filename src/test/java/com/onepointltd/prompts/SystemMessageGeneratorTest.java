@@ -15,7 +15,9 @@ class SystemMessageGeneratorTest {
   void generateSystemMessage() throws IOException {
     DuckDuckGo duckDuckGo = new DuckDuckGo(new Config());
     Wikipedia wikipedia = new Wikipedia(new Config());
-    String systemMessage = SystemMessageGenerator.generateSystemMessage(new Tool[]{duckDuckGo, wikipedia}, duckDuckGo.name());
+    String systemMessage =
+        SystemMessageGenerator.generateSystemMessage(
+            new Tool[] {duckDuckGo, wikipedia}, duckDuckGo.name());
     assertNotNull(systemMessage);
     System.out.println(systemMessage);
   }

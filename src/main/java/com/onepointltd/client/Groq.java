@@ -9,6 +9,4 @@ public class Groq extends AbstractClient {
   public Groq(Config config) {
     super(config, GROQ_ENDPOINT);
   }
-
-
 }

@@ -15,6 +15,7 @@ import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
+import com.onepointltd.tools.TodayTool;
 import com.onepointltd.tools.Tool;
 import com.onepointltd.tools.Wikipedia;
 import org.apache.commons.cli.CommandLine;
@@ -56,7 +57,7 @@ public class Main {
 
     try {
       cmd = parser.parse(options, args);
-      if(cmd.hasOption(PRINT_CONFIG_OPTION)) {
+      if (cmd.hasOption(PRINT_CONFIG_OPTION)) {
         Config config = new Config();
         System.out.println(config);
         return;
@@ -68,12 +69,26 @@ public class Main {
         var maxIterations = Integer.parseInt(cmd.getOptionValue(MAX_ITERATIONS_OPTION, "6"));
         Config config = new Config();
         System.out.printf("Model: %s%n", config.getModelName());
-        Client client = config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
+        Client client =
+            config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
         AgentExecutor agentExecutor;
         switch (agentType) {
-          case "plain" -> agentExecutor = new AgentExecutor(client, new Tool[]{new DuckDuckGo(config), new Wikipedia(config)}, maxIterations);
-          case "function" -> agentExecutor = new FunctionalAgentExecutor(client,
-              new FunctionalTool[]{new FunctionalDuckDuckGo(config), new FunctionalWikipedia(config), new FunctionalCalculator()}, maxIterations);
+          case "plain" ->
+              agentExecutor =
+                  new AgentExecutor(
+                      client,
+                      new Tool[] {new DuckDuckGo(config), new Wikipedia(config), new TodayTool()},
+                      maxIterations);
+          case "function" ->
+              agentExecutor =
+                  new FunctionalAgentExecutor(
+                      client,
+                      new FunctionalTool[] {
+                        new FunctionalDuckDuckGo(config),
+                        new FunctionalWikipedia(config),
+                        new FunctionalCalculator()
+                      },
+                      maxIterations);
           default -> {
             System.out.println("Invalid agent type");
             printUsage(options, helper);
@@ -104,30 +119,50 @@ public class Main {
 
   private static Options initOptions() {
     var options = new Options();
-    options.addOption(Option.builder(PROMPT_OPTION).longOpt(PROMPT_LONG_OPTION)
-        .argName(PROMPT_LONG_OPTION)
-        .hasArg()
-        .required(false)
-        .desc("set the question you want to ask in quotes").build());
-    options.addOption(Option.builder(AGENT_TYPE_OPTION).longOpt("agent-type")
-        .argName("agent-type")
-        .hasArg()
-        .required(false)
-        .desc(String.format("sets the agent type. One of '%s', '%s' are the options", AGENT_TYPE_DEFAULT, AGENT_TYPE_FUNCTION)).build());
-    options.addOption(Option.builder(MAX_ITERATIONS_OPTION).longOpt(MAX_ITERATIONS_LONG_OPTION)
-        .argName(MAX_ITERATIONS_LONG_OPTION)
-        .hasArg()
-        .required(false)
-        .desc("sets the maximum number of iterations, like e.g. 5").build());
-    options.addOption(Option.builder(PRINT_CONFIG_OPTION).longOpt(PRINT_CONFIG_LONG_OPTION)
-        .argName(PRINT_CONFIG_LONG_OPTION)
-        .required(false)
-        .desc("prints the configuration").build());
+    options.addOption(
+        Option.builder(PROMPT_OPTION)
+            .longOpt(PROMPT_LONG_OPTION)
+            .argName(PROMPT_LONG_OPTION)
+            .hasArg()
+            .required(false)
+            .desc("set the question you want to ask in quotes")
+            .build());
+    options.addOption(
+        Option.builder(AGENT_TYPE_OPTION)
+            .longOpt("agent-type")
+            .argName("agent-type")
+            .hasArg()
+            .required(false)
+            .desc(
+                String.format(
+                    "sets the agent type. One of '%s', '%s' are the options",
+                    AGENT_TYPE_DEFAULT, AGENT_TYPE_FUNCTION))
+            .build());
+    options.addOption(
+        Option.builder(MAX_ITERATIONS_OPTION)
+            .longOpt(MAX_ITERATIONS_LONG_OPTION)
+            .argName(MAX_ITERATIONS_LONG_OPTION)
+            .hasArg()
+            .required(false)
+            .desc("sets the maximum number of iterations, like e.g. 5")
+            .build());
+    options.addOption(
+        Option.builder(PRINT_CONFIG_OPTION)
+            .longOpt(PRINT_CONFIG_LONG_OPTION)
+            .argName(PRINT_CONFIG_LONG_OPTION)
+            .required(false)
+            .desc("prints the configuration")
+            .build());
     return options;
   }
 
   private static void printUsage(Options options, HelpFormatter helper) {
-    helper.printHelp("parameters:", "", options,"\"%JAVA_HOME%\\bin\\java\" -jar simple_agent-1.0-SNAPSHOT.jar -p \"Who is the UK prime minister?\" -t plain -m 6", true);
+    helper.printHelp(
+        "parameters:",
+        "",
+        options,
+        "\"%JAVA_HOME%\\bin\\java\" -jar simple_agent-1.0-SNAPSHOT.jar -p \"Who is the UK prime minister?\" -t plain -m 6",
+        true);
     System.exit(1);
   }
 }

@@ -10,7 +10,11 @@ public class FunctionProvider {
 
   public static Function createFunction() {
     Function function = new Function("duduckgo_search", "Search the web using DuckDuckGo.");
-    Parameters parameters = new Parameters("object", Map.of("search", new PropertyValue("The search string", "string")), List.of("required"));
+    Parameters parameters =
+        new Parameters(
+            "object",
+            Map.of("search", new PropertyValue("The search string", "string")),
+            List.of("required"));
     function.setParameters(parameters);
     return function;
   }

@@ -35,25 +35,31 @@ public class Wikipedia extends AbstractTool {
     HttpClient client = HttpClient.newHttpClient();
 
     // Prepare query parameters
-    Map<String, String> params = Map.of(
-        "action", "query",
-        "list", "search",
-        "srsearch", input,
-        "format", "json"
-    );
+    Map<String, String> params =
+        Map.of(
+            "action", "query",
+            "list", "search",
+            "srsearch", input,
+            "format", "json");
 
-    String queryString = params.entrySet().stream()
-        .map(entry -> URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8) + "=" + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
-        .collect(Collectors.joining("&"));
+    String queryString =
+        params.entrySet().stream()
+            .map(
+                entry ->
+                    URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8)
+                        + "="
+                        + URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8))
+            .collect(Collectors.joining("&"));
 
     try {
 
       // Build HttpRequest
-      HttpRequest request = HttpRequest.newBuilder()
-          .uri(URI.create(ENDPOINT + queryString))
-          .GET()
-          .timeout(Duration.ofSeconds(config.getTimeout()))
-          .build();
+      HttpRequest request =
+          HttpRequest.newBuilder()
+              .uri(URI.create(ENDPOINT + queryString))
+              .GET()
+              .timeout(Duration.ofSeconds(config.getTimeout()))
+              .build();
 
       // Send the request and handle the response
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -87,5 +93,4 @@ public class Wikipedia extends AbstractTool {
   public String description() {
     return "Returns the Wikipedia page summary for the given search term. Useful for retrieval of historical information.";
   }
-
 }

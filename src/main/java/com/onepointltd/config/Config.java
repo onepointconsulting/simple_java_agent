@@ -63,13 +63,16 @@ public class Config {
   public void setProvider(ModelProvider provider) {
     this.provider = provider;
   }
+
   @Override
   public String toString() {
-    return String.format("""
+    return String.format(
+        """
 MODEL_PROVIDER: %s
 API_KEY: %s
 MODEL_NAME: %s
 TIMEOUT: %d
-""", provider, apiKey, modelName, timeout);
+""",
+        provider, apiKey, modelName, timeout);
   }
 }

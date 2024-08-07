@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.onepointltd"
@@ -76,4 +77,12 @@ tasks.jar {
         .map(::zipTree) // OR .map { zipTree(it) }
     from(dependencies)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+spotless {
+    java {
+        importOrder() // standard import order
+        removeUnusedImports()
+        googleJavaFormat()
+    }
 }

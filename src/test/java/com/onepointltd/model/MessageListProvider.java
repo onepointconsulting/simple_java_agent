@@ -10,7 +10,6 @@ public class MessageListProvider {
         new Message(Roles.USER, "Hello, assistant!"),
         new Message(Roles.ASSISTANT, "How are you today?"),
         new Message(Roles.USER, "I'm fine, thank you!"),
-        new Message(Roles.ASSISTANT, "Good to hear that!")
-    );
+        new Message(Roles.ASSISTANT, "Good to hear that!"));
   }
 }

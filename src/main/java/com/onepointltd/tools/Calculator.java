@@ -19,8 +19,8 @@ public class Calculator extends AbstractTool {
 
   @Override
   public String description() {
-    return "Calculator tool to perform arithmetic operations for expressions like 2+2, 3*4, 5*6/2, etc. " +
-        "The calculator accepts no text like `kilometers` or `meters` as input. It only accepts arithmetic expressions.";
+    return "Calculator tool to perform arithmetic operations for expressions like 2+2, 3*4, 5*6/2, etc. "
+        + "The calculator accepts no text like `kilometers` or `meters` as input. It only accepts arithmetic expressions.";
   }
 
   @Override

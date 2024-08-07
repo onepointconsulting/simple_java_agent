@@ -30,16 +30,15 @@ public class DuckDuckGo extends AbstractTool {
 
   @Override
   public String execute(String input) {
-    HttpClient client = HttpClient.newBuilder()
-        .followRedirects(HttpClient.Redirect.ALWAYS)
-        .build();
+    HttpClient client = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build();
     String url = DUCKDUCKGO_ENDPOINT + "?q=" + URLEncoder.encode(input, StandardCharsets.UTF_8);
-    HttpRequest request = HttpRequest.newBuilder()
-        .uri(URI.create(url))
-        .header("User-Agent", "Mozilla/5.0")
-        .header("Accept", "*/*")
-        .timeout(Duration.ofSeconds(config.getTimeout()))
-        .build();
+    HttpRequest request =
+        HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .header("User-Agent", "Mozilla/5.0")
+            .header("Accept", "*/*")
+            .timeout(Duration.ofSeconds(config.getTimeout()))
+            .build();
     try {
       // Send the request and handle the response
       HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
@@ -72,6 +71,4 @@ public class DuckDuckGo extends AbstractTool {
   public String description() {
     return "Returns the result of a DuckDuckGo search.";
   }
-
-
 }

@@ -53,6 +53,4 @@ public class AgentOpenAIExecutorTest {
   public void whenRationEarthJupiter_WithMassOfEarth() {
     rungAgentOpenAI(QUESTION_EARTH_JUPITER_DIAMETERS);
   }
-
-
 }

@@ -25,7 +25,8 @@ public abstract class AbstractClient implements Client {
 
   final String endpoint;
 
-  static final String TEMPLATE = """
+  static final String TEMPLATE =
+      """
 {
   "model": "%s",
   "messages": %s,
@@ -33,7 +34,8 @@ public abstract class AbstractClient implements Client {
 }
       """;
 
-  static final String FUNCTION_TEMPLATE = """
+  static final String FUNCTION_TEMPLATE =
+      """
 {
   "model": "%s",
   "messages": %s,
@@ -52,13 +54,14 @@ public abstract class AbstractClient implements Client {
     try {
       String jsonBody = createBody(messages, tools);
       logger.info("Sending request to " + this.endpoint + " with body: " + jsonBody);
-      HttpRequest request = HttpRequest.newBuilder()
-          .uri(URI.create(this.endpoint))
-          .timeout(Duration.ofSeconds(config.getTimeout()))
-          .header("Authorization", "Bearer " + config.getApiKey())
-          .header("Content-Type", "application/json")
-          .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-          .build();
+      HttpRequest request =
+          HttpRequest.newBuilder()
+              .uri(URI.create(this.endpoint))
+              .timeout(Duration.ofSeconds(config.getTimeout()))
+              .header("Authorization", "Bearer " + config.getApiKey())
+              .header("Content-Type", "application/json")
+              .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+              .build();
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       String body = response.body();
       logger.info("Response body " + body);
@@ -77,7 +80,7 @@ public abstract class AbstractClient implements Client {
 
   public String createBody(List<Message> messages, List<ToolField> tools) {
     String messagesJson = Serializer.toJson(messages).replaceAll("toolCalls", "tool_calls");
-    if(tools != null && !tools.isEmpty()) {
+    if (tools != null && !tools.isEmpty()) {
       String toolsJson = Serializer.toJson(tools);
       return String.format(FUNCTION_TEMPLATE, config.getModelName(), messagesJson, toolsJson);
     } else {

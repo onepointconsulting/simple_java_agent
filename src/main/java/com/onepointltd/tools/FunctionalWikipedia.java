@@ -18,7 +18,11 @@ public class FunctionalWikipedia extends Wikipedia implements FunctionalTool {
   @Override
   public Function function() {
     Function function = new Function(super.name(), super.description());
-    Parameters parameters = new Parameters("object", Map.of(SEARCH, new PropertyValue("The search expression", "string")), List.of("search"));
+    Parameters parameters =
+        new Parameters(
+            "object",
+            Map.of(SEARCH, new PropertyValue("The search expression", "string")),
+            List.of("search"));
     function.setParameters(parameters);
     return function;
   }

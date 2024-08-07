@@ -31,24 +31,31 @@ public class GroqTest {
   }
 
   private void processGroq(Message inputMessage, Function function) {
-    Response response = groq.completions(List.of(inputMessage), function == null ? null : Stream.of(function).map(ToolField::new).toList());
+    Response response =
+        groq.completions(
+            List.of(inputMessage),
+            function == null ? null : Stream.of(function).map(ToolField::new).toList());
     assertNotNull(response);
     assertEquals(200, response.statusCode());
     Optional<Message> optionalMessage = MessageExtraction.extract(response);
     assertTrue(optionalMessage.isPresent());
     Message message = optionalMessage.get();
     assertTrue(message.content() != null || message.functionCall() != null);
-    if(message.content() != null)
-      System.out.println(message.content());
-    if (message.functionCall() != null)
-      System.out.println(message.functionCall());
+    if (message.content() != null) System.out.println(message.content());
+    if (message.functionCall() != null) System.out.println(message.functionCall());
     assertNotNull(message.role());
   }
 
   @Test
   void whenSendUserMessageFunctions_ShouldReceiveResponse() {
     Function function = new Function("math_sqrt", "Takes the square root of a number");
-    Parameters parameters = new Parameters("object", Map.of("number", new PropertyValue("The number to be printed", ParameterType.INTEGER.toString())), List.of("number"));
+    Parameters parameters =
+        new Parameters(
+            "object",
+            Map.of(
+                "number",
+                new PropertyValue("The number to be printed", ParameterType.INTEGER.toString())),
+            List.of("number"));
     function.setParameters(parameters);
     processGroq(new Message("user", "What is the square root of 2?"), function);
   }

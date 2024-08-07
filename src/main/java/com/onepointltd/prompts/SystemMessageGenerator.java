@@ -8,8 +8,9 @@ import java.util.Scanner;
 public class SystemMessageGenerator {
 
   public static String generateSystemMessage(Tool[] tools, String defaultTool) {
-    try(InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("system.txt")) {
-      if(in == null) {
+    try (InputStream in =
+        Thread.currentThread().getContextClassLoader().getResourceAsStream("system.txt")) {
+      if (in == null) {
         throw new IOException("system.txt not found");
       }
       String systemMessage = new Scanner(in).useDelimiter("\\Z").next();
@@ -23,7 +24,8 @@ public class SystemMessageGenerator {
   private static String generateToolDescriptions(Tool[] tools) {
     StringBuilder message = new StringBuilder();
     for (Tool tool : tools) {
-      message.append(String.format("""
+      message.append(
+          String.format("""
 %s:
 e.g. %s
 %s

@@ -1,6 +1,6 @@
 package com.onepointltd.aagent;
 
-import static com.onepointltd.aagent.AgentRunnerFunction.rungAgentGroq;
+import static com.onepointltd.aagent.AgentRunnerFunction.rungAgentGroqSimple;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_EARTH_JUPITER_DIAMETERS;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_MASS_EARTH_BY_2;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_MATH_EQUATION;
@@ -16,43 +16,46 @@ public class AgentExecutorTest {
 
   @Test
   public void whenOlympicGames_ShouldBeParis() {
-    rungAgentGroq(QUESTION_OLYMPIC);
+    rungAgentGroqSimple(QUESTION_OLYMPIC);
   }
 
   @Test
   public void whenWhoIsUKPrimeMinister_ShouldBeKeir() {
-    rungAgentGroq(QUESTION_UK_PRIME_MINISTER);
+    rungAgentGroqSimple(QUESTION_UK_PRIME_MINISTER);
   }
 
   @Test
   public void whenNvidiaSharePricesToday_ShouldBeKeir() {
-    rungAgentGroq(QUESTION_NVIDIA_SHARE_PRICES);
+    rungAgentGroqSimple(QUESTION_NVIDIA_SHARE_PRICES);
   }
 
   @Test
   public void whenWhoRuledPortugalin2010_ShouldGiveAnswer() {
-    rungAgentGroq(QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010);
+    rungAgentGroqSimple(QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010);
   }
 
   @Test
   public void whenWeatherLondonTomorrow_ShouldGiveAnswer() {
-    rungAgentGroq(QUESTION_WEATHER_LONDON_TOMORROW);
+    rungAgentGroqSimple(QUESTION_WEATHER_LONDON_TOMORROW);
   }
 
   @Test
   public void whenCalculate_ShouldCalculate() {
-    rungAgentGroq(QUESTION_MATH_EQUATION);
+    rungAgentGroqSimple(QUESTION_MATH_EQUATION);
   }
 
   @Test
   public void whenCalculate_WithMassOfEarth() {
-    rungAgentGroq(QUESTION_MASS_EARTH_BY_2);
+    rungAgentGroqSimple(QUESTION_MASS_EARTH_BY_2);
   }
 
   @Test
   public void whenRationEarthJupiter_WithMassOfEarth() {
-    rungAgentGroq(QUESTION_EARTH_JUPITER_DIAMETERS);
+    rungAgentGroqSimple(QUESTION_EARTH_JUPITER_DIAMETERS);
   }
 
-
+  @Test
+  public void whenTodayDate_ShouldRetrieveDate() {
+    rungAgentGroqSimple("Which is today's date?");
+  }
 }

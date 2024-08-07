@@ -73,6 +73,13 @@ Answer: The current UK Prime Minister is Keir Starmer.
 .\run.bat -p "Who is the current UK Chancellor of the Exchequer?"
 ```
 
+```batch
+.\run.bat -p "What will be the weather in London tomorrow? Please mention the date in the response."
+```
+
+```batch
+```
+
 ### Parameters which you can use to run the agent main application
 
 ```
