@@ -27,4 +27,8 @@ public class QuestionProvider {
 
   public static final String QUESTION_EARTH_JUPITER_DIAMETERS =
       "What is the ratio between the diameter of the earth compared to the diameter of Jupiter?";
+
+  public static final String QUESTION_TODAY = "Which is today's date?";
+
+  public static final String QUESTION_TOMORROW = "Which is tomorrow's date?";
 }

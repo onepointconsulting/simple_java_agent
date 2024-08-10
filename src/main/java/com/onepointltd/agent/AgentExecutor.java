@@ -31,7 +31,7 @@ public class AgentExecutor {
 
   Optional<ToolCall> extractAction(String content) {
     // Define the regex pattern
-    String regex = "Tool: (\\w+): (.+)";
+    String regex = "Tool:\\s*(\\w+)(:\\s*(.+))?";
 
     // Compile the pattern
     Pattern pattern = Pattern.compile(regex);
@@ -41,7 +41,7 @@ public class AgentExecutor {
 
     if (matcher.find()) {
       String tool = matcher.group(1);
-      String query = matcher.group(2);
+      String query = matcher.groupCount() > 1 ? matcher.group(3) : "";
 
       // Print the results
       return Optional.of(new ToolCall(tool, query));

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class TodayTool extends AbstractTool {
 
   @Override
-  public String execute(String input) {
+  public String execute(String ignored) {
     LocalDate today = LocalDate.now();
     return today.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
   }

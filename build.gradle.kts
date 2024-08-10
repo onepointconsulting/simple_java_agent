@@ -42,6 +42,7 @@ dependencies {
     // CLI parsing
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     implementation("commons-cli:commons-cli:1.8.0")
+    implementation("io.github.cdimascio:dotenv-java:3.0.0")
 
     intTestImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     intTestRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -1,7 +1,7 @@
-package com.onepointltd.aagent;
+package com.onepointltd.agent;
 
-import com.onepointltd.agent.AgentExecutor;
-import com.onepointltd.agent.FunctionalAgentExecutor;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import com.onepointltd.client.Client;
 import com.onepointltd.client.Groq;
 import com.onepointltd.client.OpenAI;
@@ -11,6 +11,7 @@ import com.onepointltd.tools.Calculator;
 import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
+import com.onepointltd.tools.FunctionalTodayTool;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
 import com.onepointltd.tools.TodayTool;
@@ -37,12 +38,23 @@ public class AgentRunnerFunction {
     }
   }
 
-  static void rungAgentOpenAI(String question) {
+  static void rungAgentOpenAISimple(String question) {
+    rungAgentOpenAI(question, false);
+  }
+
+  static void rungAgentOpenAIFunctional(String question) {
+    rungAgentOpenAI(question, true);
+  }
+
+  static void rungAgentOpenAI(String question, boolean functional) {
     Config config = new Config();
     config.setProvider(ModelProvider.OPENAI);
-    config.setModelName("gpt-4o");
     System.out.printf("Model: %s%n", config.getModelName());
-    runAgentFunctional(question, new OpenAI(config), config);
+    if (functional) {
+      runAgentFunctional(question, new OpenAI(config), config);
+    } else {
+      runAgent(question, new OpenAI(config), config);
+    }
   }
 
   static void runAgent(String question, Client client, Config config) {
@@ -55,6 +67,11 @@ public class AgentRunnerFunction {
             8);
     String answer = agentExecutor.execute(question);
     printAnswer(answer);
+    assertFailure(answer);
+  }
+
+  private static void assertFailure(String answer) {
+    assertFalse(answer.toLowerCase().contains("failed"));
   }
 
   static void runAgentFunctional(String question, Client client, Config config) {
@@ -64,11 +81,13 @@ public class AgentRunnerFunction {
             new FunctionalTool[] {
               new FunctionalDuckDuckGo(config),
               new FunctionalWikipedia(config),
-              new FunctionalCalculator()
+              new FunctionalCalculator(),
+              new FunctionalTodayTool()
             },
             8);
     String answer = agentExecutor.execute(question);
     printAnswer(answer);
+    assertFailure(answer);
   }
 
   private static void printAnswer(String answer) {

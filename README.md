@@ -31,17 +31,19 @@ call gradlew jar
 You will need to set the Groq API or the OpenAI key, the model name and the timeout as environment variables:
 
 ```
-MODEL_PROVIDER=<groq|openai>
-API_KEY=your-api-key
-MODEL_NAME=<model-name>
-TIMEOUT=60 # in seconds, optional.
+API_KEY_GROQ=YOUR_API_KEY
+API_KEY_OPENAI=YOUR_API_KEY
+MODEL_NAME_GROQ=llama-3.1-70b-versatile
+MODEL_NAME_OPENAI=gpt-4o-mini
+MODEL_PROVIDER=<GROQ|OPENAI>
+TIMEOUT=60
 ```
 
 These are all environmeent variables:
 
 - MODEL_PROVIDER: The model provider, which can be either `groq` or `openai`. If you do not specify it, it will default to `groq`.
-- API_KEY: The Groq API or the OpenAI key.
-- MODEL_NAME: The model name, like e.g. `llama-3.1-70b-versatile`. `gpt-4o`
+- MODEL_NAME_GROQ: The model name, like e.g. `llama-3.1-70b-versatile`
+- MODEL_NAME_OPENAI. Example: `gpt-4o`
 - TIMEOUT: timeout for the model in seconds. Optional
 
 The timeout is in seconds.

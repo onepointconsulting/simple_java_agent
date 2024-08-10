@@ -1,31 +1,46 @@
 package com.onepointltd.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 public class Config {
 
-  public static final String API_KEY = "API_KEY";
+  public static final String API_KEY_GROQ = "API_KEY_GROQ";
 
-  public static final String MODEL_NAME = "MODEL_NAME";
+  public static final String API_KEY_OPENAI = "API_KEY_OPENAI";
+
+  public static final String MODEL_NAME_GROQ = "MODEL_NAME_GROQ";
+
+  public static final String MODEL_NAME_OPENAI = "MODEL_NAME_OPENAI";
 
   public static final String TIMEOUT = "TIMEOUT";
 
   public static final String MODEL_PROVIDER = "MODEL_PROVIDER";
 
-  private final String apiKey;
+  private final String apiKeyGroq;
 
-  private String modelName;
+  private final String apiKeyOpenAI;
+
+  private final String modelNameGroq;
+
+  private final String modelNameOpenAI;
 
   private final int timeout;
 
   private ModelProvider provider;
 
   public Config() {
-    apiKey = System.getenv(API_KEY);
-    checkExists(apiKey, API_KEY);
-    modelName = System.getenv(MODEL_NAME);
-    checkExists(modelName, MODEL_NAME);
-    String timeoutStr = System.getenv(TIMEOUT);
+    Dotenv dotenv = Dotenv.load();
+    apiKeyGroq = dotenv.get(API_KEY_GROQ);
+    checkExists(apiKeyGroq, API_KEY_GROQ);
+    apiKeyOpenAI = dotenv.get(API_KEY_OPENAI);
+    checkExists(apiKeyOpenAI, API_KEY_OPENAI);
+    modelNameGroq = dotenv.get(MODEL_NAME_GROQ);
+    checkExists(modelNameGroq, MODEL_NAME_GROQ);
+    modelNameOpenAI = dotenv.get(MODEL_NAME_OPENAI);
+    checkExists(modelNameOpenAI, MODEL_NAME_OPENAI);
+    String timeoutStr = dotenv.get(TIMEOUT);
     timeout = Integer.parseInt(timeoutStr == null ? "60" : timeoutStr);
-    String providerVar = System.getenv(MODEL_PROVIDER);
+    String providerVar = dotenv.get(MODEL_PROVIDER);
     if (providerVar == null) {
       provider = ModelProvider.GROQ;
     } else {
@@ -41,11 +56,11 @@ public class Config {
   }
 
   public String getApiKey() {
-    return apiKey;
+    return provider == ModelProvider.GROQ ? apiKeyGroq : apiKeyOpenAI;
   }
 
   public String getModelName() {
-    return modelName;
+    return provider == ModelProvider.GROQ ? modelNameGroq : modelNameOpenAI;
   }
 
   public int getTimeout() {
@@ -54,10 +69,6 @@ public class Config {
 
   public ModelProvider getProvider() {
     return provider;
-  }
-
-  public void setModelName(String modelName) {
-    this.modelName = modelName;
   }
 
   public void setProvider(ModelProvider provider) {
@@ -73,6 +84,6 @@ API_KEY: %s
 MODEL_NAME: %s
 TIMEOUT: %d
 """,
-        provider, apiKey, modelName, timeout);
+        provider, getApiKey(), getModelName(), timeout);
   }
 }
