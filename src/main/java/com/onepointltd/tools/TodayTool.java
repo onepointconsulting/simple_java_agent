@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public class TodayTool extends AbstractTool {
 
+  public static final String NAME = "today";
+
   @Override
   public String execute(String ignored) {
     LocalDate today = LocalDate.now();
@@ -12,7 +14,7 @@ public class TodayTool extends AbstractTool {
 
   @Override
   public String name() {
-    return "Today";
+    return NAME;
   }
 
   @Override

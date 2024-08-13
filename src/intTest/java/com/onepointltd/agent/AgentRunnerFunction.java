@@ -1,5 +1,6 @@
 package com.onepointltd.agent;
 
+import static com.onepointltd.config.Logging.logger;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.onepointltd.client.Client;
@@ -8,8 +9,10 @@ import com.onepointltd.client.OpenAI;
 import com.onepointltd.config.Config;
 import com.onepointltd.config.ModelProvider;
 import com.onepointltd.tools.Calculator;
+import com.onepointltd.tools.DateFromTodayTool;
 import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
+import com.onepointltd.tools.FunctionalDateFromTodayTool;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
 import com.onepointltd.tools.FunctionalTodayTool;
 import com.onepointltd.tools.FunctionalTool;
@@ -30,11 +33,12 @@ public class AgentRunnerFunction {
 
   static void rungAgentGroq(String question, boolean functional) {
     Config config = new Config();
-    System.out.printf("Model: %s%n", config.getModelName());
+    config.setProvider(ModelProvider.GROQ);
+    logger.info(String.format("Model: %s%n", config.getModelName()));
     if (functional) {
-      runAgentFunctional(question, new Groq(new Config()), config);
+      runAgentFunctional(question, new Groq(config), config);
     } else {
-      runAgent(question, new Groq(new Config()), config);
+      runAgent(question, new Groq(config), config);
     }
   }
 
@@ -62,7 +66,11 @@ public class AgentRunnerFunction {
         new AgentExecutor(
             client,
             new Tool[] {
-              new DuckDuckGo(config), new Wikipedia(config), new Calculator(), new TodayTool()
+              new DuckDuckGo(config),
+              new Wikipedia(config),
+              new Calculator(),
+              new TodayTool(),
+              new DateFromTodayTool()
             },
             8);
     String answer = agentExecutor.execute(question);
@@ -82,7 +90,8 @@ public class AgentRunnerFunction {
               new FunctionalDuckDuckGo(config),
               new FunctionalWikipedia(config),
               new FunctionalCalculator(),
-              new FunctionalTodayTool()
+              new FunctionalTodayTool(),
+              new FunctionalDateFromTodayTool()
             },
             8);
     String answer = agentExecutor.execute(question);

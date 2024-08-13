@@ -6,6 +6,7 @@ import static com.onepointltd.provider.QuestionProvider.QUESTION_MATH_EQUATION;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_NVIDIA_SHARE_PRICES;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_OLYMPIC;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_SQUARE_ROOT;
+import static com.onepointltd.provider.QuestionProvider.QUESTION_TOMORROW;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_WEATHER_LONDON_TOMORROW;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010;
 
@@ -46,5 +47,10 @@ public class FunctionAgentExecutorTest {
   @Test
   public void whenRationEarthJupiter_WithMassOfEarth() {
     rungAgentGroqFunctional(QUESTION_EARTH_JUPITER_DIAMETERS);
+  }
+
+  @Test
+  public void whenTomorrowsDate_ShouldRetrieveDate() {
+    rungAgentGroqFunctional(QUESTION_TOMORROW);
   }
 }

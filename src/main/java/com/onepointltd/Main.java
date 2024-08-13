@@ -10,6 +10,7 @@ import com.onepointltd.client.OpenAI;
 import com.onepointltd.config.Config;
 import com.onepointltd.config.Logging;
 import com.onepointltd.config.ModelProvider;
+import com.onepointltd.tools.Calculator;
 import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
@@ -65,10 +66,11 @@ public class Main {
       if (cmd.hasOption(PROMPT_OPTION)) {
         logger.info("Starting agent");
         var question = cmd.getOptionValue(PROMPT_OPTION);
+        logger.info("Prompt: " + question);
         var agentType = cmd.getOptionValue(AGENT_TYPE_OPTION, "plain");
         var maxIterations = Integer.parseInt(cmd.getOptionValue(MAX_ITERATIONS_OPTION, "6"));
         Config config = new Config();
-        System.out.printf("Model: %s%n", config.getModelName());
+        logger.info(String.format("Model: %s%n", config.getModelName()));
         Client client =
             config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
         AgentExecutor agentExecutor;
@@ -77,7 +79,12 @@ public class Main {
               agentExecutor =
                   new AgentExecutor(
                       client,
-                      new Tool[] {new DuckDuckGo(config), new Wikipedia(config), new TodayTool()},
+                      new Tool[] {
+                        new DuckDuckGo(config),
+                        new Wikipedia(config),
+                        new Calculator(),
+                        new TodayTool()
+                      },
                       maxIterations);
           case "function" ->
               agentExecutor =
@@ -90,7 +97,7 @@ public class Main {
                       },
                       maxIterations);
           default -> {
-            System.out.println("Invalid agent type");
+            logger.info("Invalid agent type");
             printUsage(options, helper);
             return;
           }

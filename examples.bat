@@ -1,0 +1,7 @@
+call .\run.bat "Which is today's IBM stock price?"
+call .\run.bat "Which is today's NVIDIA stock price?"
+call .\run.bat "Who is UK's prime minister?"
+call .\run.bat "What is the diameter of the Earth?"
+call .\run.bat "What is the diameter of Saturn?"
+call .\run.bat "What is the ratio of the Earth's diameter compared to the ration of Saturn?"
+call .\run.bat "What is the ratio of the Earth's diameter compared to the ration of Saturn?"

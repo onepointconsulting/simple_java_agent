@@ -10,11 +10,14 @@ import com.onepointltd.model.ToolCall;
 import com.onepointltd.model.ToolField;
 import com.onepointltd.prompts.SystemMessageGenerator;
 import com.onepointltd.tools.Calculator;
+import com.onepointltd.tools.DateFromTodayTool;
 import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
+import com.onepointltd.tools.FunctionalDateFromTodayTool;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
+import com.onepointltd.tools.TodayTool;
 import com.onepointltd.tools.Tool;
 import com.onepointltd.tools.Wikipedia;
 import java.util.Arrays;
@@ -47,7 +50,7 @@ public class FunctionalAgentExecutor extends AgentExecutor {
     List<Map<String, Object>> toolCalls = null;
     while (iteration < maxIterations) {
       Message response = agent.call(nextPrompt, toolCalls);
-      System.out.println(response);
+      logger.info(response.toString());
       toolCalls = response.toolCalls();
       String content = response.content();
       iteration++;
@@ -85,6 +88,13 @@ public class FunctionalAgentExecutor extends AgentExecutor {
           case Calculator.NAME -> {
             String expression = args.get(FunctionalCalculator.EXPRESSION).toString();
             toolCall = new ToolCall(Calculator.NAME, expression);
+          }
+          case TodayTool.NAME -> {
+            toolCall = new ToolCall(TodayTool.NAME, null);
+          }
+          case DateFromTodayTool.NAME -> {
+            String dateDifferenceDays = args.get(FunctionalDateFromTodayTool.DATE_DIFFERENCE_DAYS).toString();
+            toolCall = new ToolCall(DateFromTodayTool.NAME, dateDifferenceDays);
           }
         }
         if (toolCall != null) {

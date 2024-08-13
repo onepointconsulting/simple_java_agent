@@ -6,9 +6,9 @@ import com.onepointltd.model.PropertyValue;
 import java.util.List;
 import java.util.Map;
 
-public class FunctionalCalculator extends Calculator implements FunctionalTool {
+public class FunctionalDateFromTodayTool extends DateFromTodayTool implements FunctionalTool {
 
-  public static final String EXPRESSION = "expression";
+  public static final String DATE_DIFFERENCE_DAYS = "date_difference_days";
 
   @Override
   public Function function() {
@@ -17,8 +17,11 @@ public class FunctionalCalculator extends Calculator implements FunctionalTool {
         new Parameters(
             "object",
             Map.of(
-                EXPRESSION, new PropertyValue("The expression used in the calculation", "string")),
-            List.of(EXPRESSION));
+                DATE_DIFFERENCE_DAYS,
+                new PropertyValue(
+                    "The difference in days from today. May be a positive or negative integer",
+                    "string")),
+            List.of(DATE_DIFFERENCE_DAYS));
     function.setParameters(parameters);
     return function;
   }

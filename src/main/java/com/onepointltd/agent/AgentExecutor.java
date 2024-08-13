@@ -1,5 +1,7 @@
 package com.onepointltd.agent;
 
+import static com.onepointltd.config.Logging.logger;
+
 import com.onepointltd.client.Client;
 import com.onepointltd.model.Message;
 import com.onepointltd.model.ToolCall;
@@ -57,7 +59,7 @@ public class AgentExecutor {
 
     while (iteration < maxIterations) {
       Message response = agent.call(new String[] {nextPrompt}, null);
-      System.out.println(response);
+      logger.info(response.toString());
       String content = response.content();
       iteration++;
       if (content.contains(PAUSE) && content.contains(TOOL)) {
@@ -80,7 +82,7 @@ public class AgentExecutor {
       if (toolOptional.isPresent()) {
         Tool tool = toolOptional.get();
         nextPrompt = produceObservation(toolCall, tool);
-        System.out.println(nextPrompt);
+        logger.info(nextPrompt);
       } else {
         nextPrompt = String.format("Observation: Cannot find tool %s", toolCall.toolName());
       }
