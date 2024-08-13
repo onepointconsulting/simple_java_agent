@@ -93,7 +93,8 @@ public class FunctionalAgentExecutor extends AgentExecutor {
             toolCall = new ToolCall(TodayTool.NAME, null);
           }
           case DateFromTodayTool.NAME -> {
-            String dateDifferenceDays = args.get(FunctionalDateFromTodayTool.DATE_DIFFERENCE_DAYS).toString();
+            String dateDifferenceDays =
+                args.get(FunctionalDateFromTodayTool.DATE_DIFFERENCE_DAYS).toString();
             toolCall = new ToolCall(DateFromTodayTool.NAME, dateDifferenceDays);
           }
         }
