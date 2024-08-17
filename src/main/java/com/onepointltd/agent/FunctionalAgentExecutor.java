@@ -15,8 +15,10 @@ import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDateFromTodayTool;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
+import com.onepointltd.tools.FunctionalSerpApiTool;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
+import com.onepointltd.tools.SerpAPITool;
 import com.onepointltd.tools.TodayTool;
 import com.onepointltd.tools.Tool;
 import com.onepointltd.tools.Wikipedia;
@@ -39,7 +41,7 @@ public class FunctionalAgentExecutor extends AgentExecutor {
     List<ToolField> tools = functions.stream().map(ToolField::new).toList();
     return new FunctionalAgent(
         super.client,
-        SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name()),
+        SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name(), true),
         tools);
   }
 
@@ -81,6 +83,10 @@ public class FunctionalAgentExecutor extends AgentExecutor {
             String search = args.get(FunctionalDuckDuckGo.SEARCH).toString();
             toolCall = new ToolCall(DuckDuckGo.NAME, search);
           }
+          case SerpAPITool.NAME -> {
+            String search = args.get(FunctionalSerpApiTool.SEARCH).toString();
+            toolCall = new ToolCall(SerpAPITool.NAME, search);
+          }
           case Wikipedia.NAME -> {
             String search = args.get(FunctionalWikipedia.SEARCH).toString();
             toolCall = new ToolCall(Wikipedia.NAME, search);
@@ -103,6 +109,8 @@ public class FunctionalAgentExecutor extends AgentExecutor {
           if (toolOptional.isPresent()) {
             returnToolCalls[i] = produceObservation(toolCall, toolOptional.get());
           }
+        } else {
+          returnToolCalls[i] = "Observation: Tool call not found";
         }
       } catch (Exception e) {
         logger.log(Level.SEVERE, "Failed to extract tool call", e);

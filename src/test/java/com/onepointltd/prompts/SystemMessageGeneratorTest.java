@@ -17,7 +17,7 @@ class SystemMessageGeneratorTest {
     Wikipedia wikipedia = new Wikipedia(new Config());
     String systemMessage =
         SystemMessageGenerator.generateSystemMessage(
-            new Tool[] {duckDuckGo, wikipedia}, duckDuckGo.name());
+            new Tool[] {duckDuckGo, wikipedia}, duckDuckGo.name(), false);
     assertNotNull(systemMessage);
     System.out.println(systemMessage);
   }

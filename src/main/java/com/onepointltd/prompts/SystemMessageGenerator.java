@@ -7,9 +7,10 @@ import java.util.Scanner;
 
 public class SystemMessageGenerator {
 
-  public static String generateSystemMessage(Tool[] tools, String defaultTool) {
+  public static String generateSystemMessage(Tool[] tools, String defaultTool, boolean isFunctional) {
     try (InputStream in =
-        Thread.currentThread().getContextClassLoader().getResourceAsStream("system.txt")) {
+        Thread.currentThread().getContextClassLoader().getResourceAsStream(
+            isFunctional ? "system_functional.txt" : "system.txt")) {
       if (in == null) {
         throw new IOException("system.txt not found");
       }

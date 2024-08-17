@@ -14,6 +14,7 @@ import com.onepointltd.tools.DuckDuckGo;
 import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDateFromTodayTool;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
+import com.onepointltd.tools.FunctionalSerpApiTool;
 import com.onepointltd.tools.FunctionalTodayTool;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
@@ -64,22 +65,21 @@ public class AgentRunnerFunction {
   }
 
   static void runAgent(String question, Client client, Config config) {
-    var tools = new ArrayList<>();
+    Tool[] toolsArray = new Tool[5];
     boolean hasSerpApi = config.getSerpApiKey() != null;
     if(!hasSerpApi) {
-      tools.add(new DuckDuckGo(config));
+      toolsArray[0] = new DuckDuckGo(config);
+    } else {
+      toolsArray[0] = new SerpAPITool(config);
     }
-    tools.add(new Wikipedia(config));
-    tools.add(new Calculator());
-    tools.add(new TodayTool());
-    tools.add(new DateFromTodayTool());
-    if(hasSerpApi) {
-      tools.add(new SerpAPITool(config));
-    }
+    toolsArray[1] = new Wikipedia(config);
+    toolsArray[2] = new Calculator();
+    toolsArray[3] = new TodayTool();
+    toolsArray[4] = new DateFromTodayTool();
     AgentExecutor agentExecutor =
         new AgentExecutor(
             client,
-            tools.toArray(new Tool[0]),
+            toolsArray,
             config.getAgentMaxIterations());
     String answer = agentExecutor.execute(question);
     printAnswer(answer);
@@ -91,16 +91,21 @@ public class AgentRunnerFunction {
   }
 
   static void runAgentFunctional(String question, Client client, Config config) {
+    FunctionalTool[] toolsArray = new FunctionalTool[5];
+    boolean hasSerpApi = config.getSerpApiKey() != null;
+    if(!hasSerpApi) {
+      toolsArray[0] = new FunctionalDuckDuckGo(config);
+    } else {
+      toolsArray[0] = new FunctionalSerpApiTool(config);
+    }
+    toolsArray[1] = new FunctionalWikipedia(config);
+    toolsArray[2] = new FunctionalCalculator();
+    toolsArray[3] = new FunctionalTodayTool();
+    toolsArray[4] = new FunctionalDateFromTodayTool();
     AgentExecutor agentExecutor =
         new FunctionalAgentExecutor(
             client,
-            new FunctionalTool[] {
-              new FunctionalDuckDuckGo(config),
-              new FunctionalWikipedia(config),
-              new FunctionalCalculator(),
-              new FunctionalTodayTool(),
-              new FunctionalDateFromTodayTool()
-            },
+            toolsArray,
             8);
     String answer = agentExecutor.execute(question);
     printAnswer(answer);

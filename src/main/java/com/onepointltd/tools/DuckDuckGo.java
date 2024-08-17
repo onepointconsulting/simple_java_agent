@@ -1,20 +1,11 @@
 package com.onepointltd.tools;
 
-import static com.onepointltd.config.Logging.logger;
-
 import com.onepointltd.config.Config;
 import com.onepointltd.model.DuckDuckGoResult;
 import com.onepointltd.model.Serializer;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.List;
-import java.util.logging.Level;
 
 public class DuckDuckGo extends HttpTool {
 

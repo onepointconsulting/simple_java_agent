@@ -101,6 +101,6 @@ public class AgentExecutor {
   }
 
   Agent initAgent() {
-    return new Agent(client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name()));
+    return new Agent(client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name(), false));
   }
 }
