@@ -3,7 +3,7 @@ package com.onepointltd.provider;
 public class QuestionProvider {
 
   public static final String QUESTION_OLYMPIC =
-      "Who is hosting the Olympic Games this year and who will be the host next time?";
+      "Who is hosting the Olympic Games next time around?";
 
   public static final String QUESTION_UK_PRIME_MINISTER = "Who is the current UK prime minister?";
 
@@ -31,4 +31,7 @@ public class QuestionProvider {
   public static final String QUESTION_TODAY = "Which is today's date?";
 
   public static final String QUESTION_TOMORROW = "Which is tomorrow's date?";
+
+  public static final String QUESTION_TRUMP_DEBATE_KAMALA =
+      "Will Donald Trump debate Kamala Harris in the upcoming election and if so when?";
 }

@@ -16,6 +16,16 @@ public class Config {
 
   public static final String MODEL_PROVIDER = "MODEL_PROVIDER";
 
+  public static final String SERP_API_KEY = "SERP_API_KEY";
+
+  public static final String SERP_API_LOCATION = "SERP_API_LOCATION";
+
+  public static final String SERP_API_LANGUAGE_CODE = "SERP_API_LANGUAGE_CODE";
+
+  public static final String SERP_API_GEO_LOCATION = "SERP_API_GEO_LOCATION";
+
+  public static final String AGENT_MAX_ITERATIONS = "AGENT_MAX_ITERATIONS";
+
   private final String apiKeyGroq;
 
   private final String apiKeyOpenAI;
@@ -25,6 +35,16 @@ public class Config {
   private final String modelNameOpenAI;
 
   private final int timeout;
+
+  private final String serpApiKey;
+
+  private final String serpApiLocation;
+
+  private final String serpApiLanguageCode;
+
+  private final String serpApiGeoLocation;
+
+  private final int agentMaxIterations;
 
   private ModelProvider provider;
 
@@ -46,6 +66,13 @@ public class Config {
     } else {
       provider = ModelProvider.valueOf(providerVar.toUpperCase());
     }
+    serpApiKey = dotenv.get(SERP_API_KEY); // Might be null
+    serpApiLocation = dotenv.get(SERP_API_LOCATION); // Might be null
+    serpApiLanguageCode = dotenv.get(SERP_API_LANGUAGE_CODE); // Might be null
+    serpApiGeoLocation = dotenv.get(SERP_API_GEO_LOCATION); // Might be null
+
+    String agentMaxIterationsStr = dotenv.get(AGENT_MAX_ITERATIONS, "10");
+    agentMaxIterations = Integer.parseInt(agentMaxIterationsStr);
   }
 
   private <T> void checkExists(T value, String varname) {
@@ -73,6 +100,26 @@ public class Config {
 
   public void setProvider(ModelProvider provider) {
     this.provider = provider;
+  }
+
+  public String getSerpApiKey() {
+    return serpApiKey;
+  }
+
+  public String getSerpApiLocation() {
+    return serpApiLocation;
+  }
+
+  public String getSerpApiLanguageCode() {
+    return serpApiLanguageCode;
+  }
+
+  public String getSerpApiGeoLocation() {
+    return serpApiGeoLocation;
+  }
+
+  public int getAgentMaxIterations() {
+    return agentMaxIterations;
   }
 
   @Override

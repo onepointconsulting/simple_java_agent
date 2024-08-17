@@ -17,9 +17,11 @@ import com.onepointltd.tools.FunctionalDuckDuckGo;
 import com.onepointltd.tools.FunctionalTodayTool;
 import com.onepointltd.tools.FunctionalTool;
 import com.onepointltd.tools.FunctionalWikipedia;
+import com.onepointltd.tools.SerpAPITool;
 import com.onepointltd.tools.TodayTool;
 import com.onepointltd.tools.Tool;
 import com.onepointltd.tools.Wikipedia;
+import java.util.ArrayList;
 
 public class AgentRunnerFunction {
 
@@ -62,17 +64,23 @@ public class AgentRunnerFunction {
   }
 
   static void runAgent(String question, Client client, Config config) {
+    var tools = new ArrayList<>();
+    boolean hasSerpApi = config.getSerpApiKey() != null;
+    if(!hasSerpApi) {
+      tools.add(new DuckDuckGo(config));
+    }
+    tools.add(new Wikipedia(config));
+    tools.add(new Calculator());
+    tools.add(new TodayTool());
+    tools.add(new DateFromTodayTool());
+    if(hasSerpApi) {
+      tools.add(new SerpAPITool(config));
+    }
     AgentExecutor agentExecutor =
         new AgentExecutor(
             client,
-            new Tool[] {
-              new DuckDuckGo(config),
-              new Wikipedia(config),
-              new Calculator(),
-              new TodayTool(),
-              new DateFromTodayTool()
-            },
-            8);
+            tools.toArray(new Tool[0]),
+            config.getAgentMaxIterations());
     String answer = agentExecutor.execute(question);
     printAnswer(answer);
     assertFailure(answer);

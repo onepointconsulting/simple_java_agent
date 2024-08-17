@@ -63,3 +63,19 @@ You then output:
 
 Answer: The result of "2 * 3 + 4 / 2 * 10 + 12 / 32" is 26.375
 
+====================================
+
+Example session 4:
+
+Question: What are the betting sites predicting on the American Presidential Election? Who is going to win according to them?
+Thought: I should look up the current president of the United States on serp_api_tool.
+Tool: serp_api_tool: American Presidential Election betting odds
+PAUSE
+
+You will be called again with this:
+
+Observation: Donald Trump has a 48% per cent chance of winning against Kamala Harris with a 51% chance.
+
+You then output:
+
+Answer: Joe biden is the current president of the United States

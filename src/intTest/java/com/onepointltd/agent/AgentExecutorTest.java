@@ -8,6 +8,7 @@ import static com.onepointltd.provider.QuestionProvider.QUESTION_NVIDIA_SHARE_PR
 import static com.onepointltd.provider.QuestionProvider.QUESTION_OLYMPIC;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_TODAY;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_TOMORROW;
+import static com.onepointltd.provider.QuestionProvider.QUESTION_TRUMP_DEBATE_KAMALA;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_UK_PRIME_MINISTER;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_WEATHER_LONDON_TOMORROW;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_WHO_WAS_RULING_PORTUGAL_IN_2010;
@@ -64,5 +65,10 @@ public class AgentExecutorTest {
   @Test
   public void whenTomorrowsDate_ShouldRetrieveDate() {
     rungAgentGroqSimple(QUESTION_TOMORROW);
+  }
+
+  @Test
+  public void whenTrumpDebateKamala_ShouldRetrieveAnswer() {
+    rungAgentGroqSimple(QUESTION_TRUMP_DEBATE_KAMALA);
   }
 }
