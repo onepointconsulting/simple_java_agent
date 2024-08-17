@@ -41,6 +41,14 @@ MODEL_NAME_GROQ=llama-3.1-70b-versatile
 MODEL_NAME_OPENAI=gpt-4o-mini
 MODEL_PROVIDER=<GROQ|OPENAI>
 TIMEOUT=60
+
+AGENT_MAX_ITERATIONS=15
+
+# These are all optional for the Search Engine Results Page (SERP) API
+SERP_API_KEY=<key>
+SERP_API_LOCATION=London, United Kingdom
+SERP_API_LANGUAGE_CODE=en
+SERP_API_GEO_LOCATION=uk
 ```
 
 These are all environmeent variables:
