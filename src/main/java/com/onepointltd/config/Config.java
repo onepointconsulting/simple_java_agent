@@ -26,6 +26,8 @@ public class Config {
 
   public static final String AGENT_MAX_ITERATIONS = "AGENT_MAX_ITERATIONS";
 
+  public static final String HTTP_PORT = "HTTP_PORT";
+
   private final String apiKeyGroq;
 
   private final String apiKeyOpenAI;
@@ -47,6 +49,8 @@ public class Config {
   private final int agentMaxIterations;
 
   private ModelProvider provider;
+
+  private final int httpPort;
 
   public Config() {
     Dotenv dotenv = Dotenv.load();
@@ -73,6 +77,15 @@ public class Config {
 
     String agentMaxIterationsStr = dotenv.get(AGENT_MAX_ITERATIONS, "10");
     agentMaxIterations = Integer.parseInt(agentMaxIterationsStr);
+
+    String httpPortStr = dotenv.get(HTTP_PORT, "8080");
+    try {
+      httpPort = Integer.parseInt(httpPortStr);
+      System.setProperty("dw.server.applicationConnectors[0].type", "http");
+      System.setProperty("dw.server.applicationConnectors[0].port", httpPortStr);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("HTTP_PORT environment variable is not a valid number");
+    }
   }
 
   private <T> void checkExists(T value, String varname) {

@@ -28,7 +28,7 @@ public class AgentResource {
   @GET
   @Timed
   public WebResponse askQuestionGet(@QueryParam("question") String question) {
-    if(question == null || question.trim().isBlank()) {
+    if (question == null || question.trim().isBlank()) {
       throw new IllegalArgumentException("Question parameter is required.");
     }
     return new WebResponse(question, this.agentExecutor.execute(question), AgentType.PLAIN);
@@ -37,16 +37,23 @@ public class AgentResource {
   @POST
   @Timed
   public WebResponse askQuestionPost(WebQuestion webQuestion) {
-    if(webQuestion == null || webQuestion.getQuestion() == null
+    if (webQuestion == null
+        || webQuestion.getQuestion() == null
         || webQuestion.getQuestion().trim().isBlank()) {
       throw new IllegalArgumentException("Question parameter is required.");
     }
     var agentType = webQuestion.getAgentType();
     return switch (agentType) {
-      case AgentType.FUNCTION -> new WebResponse(webQuestion.getQuestion(),
-          this.functionalAgentExecutor.execute(webQuestion.getQuestion()), agentType);
-      case AgentType.PLAIN -> new WebResponse(webQuestion.getQuestion(),
-          this.agentExecutor.execute(webQuestion.getQuestion()), agentType);
+      case AgentType.FUNCTION ->
+          new WebResponse(
+              webQuestion.getQuestion(),
+              this.functionalAgentExecutor.execute(webQuestion.getQuestion()),
+              agentType);
+      case AgentType.PLAIN ->
+          new WebResponse(
+              webQuestion.getQuestion(),
+              this.agentExecutor.execute(webQuestion.getQuestion()),
+              agentType);
       default -> throw new IllegalArgumentException("Invalid agent type: " + agentType);
     };
   }

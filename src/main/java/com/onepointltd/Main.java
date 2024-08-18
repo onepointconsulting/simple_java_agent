@@ -10,6 +10,7 @@ import com.onepointltd.config.ClientFactory;
 import com.onepointltd.config.Config;
 import com.onepointltd.config.Logging;
 import com.onepointltd.model.AgentType;
+import com.onepointltd.rest.app.AgentApplication;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -33,7 +34,11 @@ public class Main {
 
   public static final String PRINT_CONFIG_LONG_OPTION = "print-config";
 
-  public static void main(String[] args) {
+  private static final String START_SERVER_OPTION = "s";
+
+  public static final String START_SERVER_LONG_OPTION = "server";
+
+  public static void main(String[] args) throws Exception {
 
     Logging.initLogging();
     Options options = initOptions();
@@ -45,6 +50,11 @@ public class Main {
 
     try {
       cmd = parser.parse(options, args);
+      if (cmd.hasOption(START_SERVER_OPTION)) {
+        logger.info("Starting server ...");
+        AgentApplication.main(new String[] {"server", "dropwizard-server.yml"});
+        return;
+      }
       if (cmd.hasOption(PRINT_CONFIG_OPTION)) {
         Config config = new Config();
         System.out.println(config);
@@ -119,6 +129,13 @@ public class Main {
             .argName(PRINT_CONFIG_LONG_OPTION)
             .required(false)
             .desc("prints the configuration")
+            .build());
+    options.addOption(
+        Option.builder(START_SERVER_OPTION)
+            .longOpt(START_SERVER_LONG_OPTION)
+            .argName(START_SERVER_LONG_OPTION)
+            .required(false)
+            .desc("Starts the server")
             .build());
     return options;
   }

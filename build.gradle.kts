@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("com.diffplug.spotless") version "6.25.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "com.onepointltd"
@@ -74,14 +75,22 @@ val integrationTest = task<Test>("integrationTest") {
 
 tasks.check { dependsOn(integrationTest) }
 
-tasks.jar {
-    manifest.attributes["Main-Class"] = "com.onepointltd.Main"
-    val dependencies = configurations
-        .runtimeClasspath
-        .get()
-        .map(::zipTree) // OR .map { zipTree(it) }
-    from(dependencies)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//tasks.jar {
+//    manifest.attributes["Main-Class"] = "com.onepointltd.Main"
+//    val dependencies = configurations
+//        .runtimeClasspath
+//        .get()
+//        .map(::zipTree) // OR .map { zipTree(it) }
+//    from(dependencies)
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//}
+
+tasks.shadowJar {
+    mergeServiceFiles()
+    exclude (listOf("META-INF/*.DSA", "META-INF/*.RSA", "META-INF/*.SF"))
+    manifest {
+        attributes (mapOf("Main-Class" to "com.onepointltd.Main"))
+    }
 }
 
 spotless {

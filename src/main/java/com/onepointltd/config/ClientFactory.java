@@ -7,7 +7,6 @@ import com.onepointltd.client.OpenAI;
 public class ClientFactory {
 
   public static Client createClient(Config config) {
-    return
-        config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
+    return config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
   }
 }

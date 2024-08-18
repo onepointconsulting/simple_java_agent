@@ -27,7 +27,8 @@ public class AgentApplication extends Application<AgentConfiguration> {
     Config config = new Config();
     Client client = ClientFactory.createClient(config);
     agentExecutor = AgentExecutorFactory.createDefaultAgentExecutor(config, client);
-    functionalAgentExecutor = FunctionalAgentExecutorFactory.createDefaultAgentExecutor(config, client);
+    functionalAgentExecutor =
+        FunctionalAgentExecutorFactory.createDefaultAgentExecutor(config, client);
   }
 
   @Override

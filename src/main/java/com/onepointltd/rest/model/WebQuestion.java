@@ -9,13 +9,14 @@ public class WebQuestion {
 
   private String agentType;
 
-  public WebQuestion() {
-  }
+  public WebQuestion() {}
 
   public WebQuestion(String question, String agentType) {
     this.question = question;
-    this.agentType = agentType == null ? AgentType.PLAIN : AgentType.AGENT_TYPES.contains(agentType)
-        ? agentType : AgentType.PLAIN;
+    this.agentType =
+        agentType == null
+            ? AgentType.PLAIN
+            : AgentType.AGENT_TYPES.contains(agentType) ? agentType : AgentType.PLAIN;
   }
 
   @JsonProperty
