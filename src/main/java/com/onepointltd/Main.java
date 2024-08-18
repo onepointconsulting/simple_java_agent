@@ -6,12 +6,10 @@ import com.onepointltd.agent.AgentExecutor;
 import com.onepointltd.agent.AgentExecutorFactory;
 import com.onepointltd.agent.FunctionalAgentExecutorFactory;
 import com.onepointltd.client.Client;
-import com.onepointltd.client.Groq;
-import com.onepointltd.client.OpenAI;
 import com.onepointltd.config.ClientFactory;
 import com.onepointltd.config.Config;
 import com.onepointltd.config.Logging;
-import com.onepointltd.config.ModelProvider;
+import com.onepointltd.model.AgentType;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -62,9 +60,9 @@ public class Main {
         Client client = ClientFactory.createClient(config);
         AgentExecutor agentExecutor;
         switch (agentType) {
-          case "plain" ->
+          case AgentType.PLAIN ->
               agentExecutor = AgentExecutorFactory.createDefaultAgentExecutor(config, client);
-          case "function" ->
+          case AgentType.FUNCTION ->
               agentExecutor =
                   FunctionalAgentExecutorFactory.createDefaultAgentExecutor(config, client);
           default -> {

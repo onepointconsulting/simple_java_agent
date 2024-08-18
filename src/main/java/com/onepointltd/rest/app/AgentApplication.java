@@ -2,6 +2,7 @@ package com.onepointltd.rest.app;
 
 import com.onepointltd.agent.AgentExecutor;
 import com.onepointltd.agent.AgentExecutorFactory;
+import com.onepointltd.agent.FunctionalAgentExecutorFactory;
 import com.onepointltd.client.Client;
 import com.onepointltd.config.ClientFactory;
 import com.onepointltd.config.Config;
@@ -15,7 +16,7 @@ public class AgentApplication extends Application<AgentConfiguration> {
 
   private AgentExecutor agentExecutor;
 
-
+  private AgentExecutor functionalAgentExecutor;
 
   public static void main(String[] args) throws Exception {
     new AgentApplication().run(args);
@@ -26,11 +27,12 @@ public class AgentApplication extends Application<AgentConfiguration> {
     Config config = new Config();
     Client client = ClientFactory.createClient(config);
     agentExecutor = AgentExecutorFactory.createDefaultAgentExecutor(config, client);
+    functionalAgentExecutor = FunctionalAgentExecutorFactory.createDefaultAgentExecutor(config, client);
   }
 
   @Override
   public void run(AgentConfiguration configuration, Environment environment) {
-    var resource = new AgentResource(agentExecutor);
+    var resource = new AgentResource(agentExecutor, functionalAgentExecutor);
     environment.jersey().register(resource);
   }
 }

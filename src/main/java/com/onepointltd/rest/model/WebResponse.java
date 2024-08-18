@@ -6,8 +6,8 @@ public class WebResponse extends WebQuestion {
 
   private final String answer;
 
-  public WebResponse(String question, String answer) {
-    super(question);
+  public WebResponse(String question, String answer, String agentType) {
+    super(question, agentType);
     this.answer = answer;
   }
 
