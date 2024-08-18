@@ -19,16 +19,22 @@ public class SerpAPITool extends HttpTool {
   @Override
   public String execute(String input) {
     HttpClient client = buildHttpClient();
-    String url = String.format("%s?q=%s&location=%s&hl=%s&gl=%s&google_domain=google.com&api_key=%s",
-        SERP_API_ENDPOINT, encode(input),
-        encode(config.getSerpApiLocation()),
-        config.getSerpApiLanguageCode(),
-        config.getSerpApiGeoLocation(),
-        config.getSerpApiKey());
+    String url =
+        String.format(
+            "%s?q=%s&location=%s&hl=%s&gl=%s&google_domain=google.com&api_key=%s",
+            SERP_API_ENDPOINT,
+            encode(input),
+            encode(config.getSerpApiLocation()),
+            config.getSerpApiLanguageCode(),
+            config.getSerpApiGeoLocation(),
+            config.getSerpApiKey());
     HttpRequest request = buildRequest(url, config);
-    return handleResponse(client, request, (responseBody) -> {
-      return responseBody;
-    });
+    return handleResponse(
+        client,
+        request,
+        (responseBody) -> {
+          return responseBody;
+        });
   }
 
   @Override

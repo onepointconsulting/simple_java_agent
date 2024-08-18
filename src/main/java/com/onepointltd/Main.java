@@ -3,22 +3,15 @@ package com.onepointltd;
 import static com.onepointltd.config.Logging.logger;
 
 import com.onepointltd.agent.AgentExecutor;
-import com.onepointltd.agent.FunctionalAgentExecutor;
+import com.onepointltd.agent.AgentExecutorFactory;
+import com.onepointltd.agent.FunctionalAgentExecutorFactory;
 import com.onepointltd.client.Client;
 import com.onepointltd.client.Groq;
 import com.onepointltd.client.OpenAI;
+import com.onepointltd.config.ClientFactory;
 import com.onepointltd.config.Config;
 import com.onepointltd.config.Logging;
 import com.onepointltd.config.ModelProvider;
-import com.onepointltd.tools.Calculator;
-import com.onepointltd.tools.DuckDuckGo;
-import com.onepointltd.tools.FunctionalCalculator;
-import com.onepointltd.tools.FunctionalDuckDuckGo;
-import com.onepointltd.tools.FunctionalTool;
-import com.onepointltd.tools.FunctionalWikipedia;
-import com.onepointltd.tools.TodayTool;
-import com.onepointltd.tools.Tool;
-import com.onepointltd.tools.Wikipedia;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -37,10 +30,6 @@ public class Main {
   private static final String AGENT_TYPE_DEFAULT = "plain";
 
   private static final String AGENT_TYPE_FUNCTION = "function";
-
-  private static final String MAX_ITERATIONS_OPTION = "m";
-
-  public static final String MAX_ITERATIONS_LONG_OPTION = "max-iterations";
 
   private static final String PRINT_CONFIG_OPTION = "c";
 
@@ -68,34 +57,16 @@ public class Main {
         var question = cmd.getOptionValue(PROMPT_OPTION);
         logger.info("Prompt: " + question);
         var agentType = cmd.getOptionValue(AGENT_TYPE_OPTION, "plain");
-        var maxIterations = Integer.parseInt(cmd.getOptionValue(MAX_ITERATIONS_OPTION, "6"));
         Config config = new Config();
         logger.info(String.format("Model: %s%n", config.getModelName()));
-        Client client =
-            config.getProvider() == ModelProvider.OPENAI ? new OpenAI(config) : new Groq(config);
+        Client client = ClientFactory.createClient(config);
         AgentExecutor agentExecutor;
         switch (agentType) {
           case "plain" ->
-              agentExecutor =
-                  new AgentExecutor(
-                      client,
-                      new Tool[] {
-                        new DuckDuckGo(config),
-                        new Wikipedia(config),
-                        new Calculator(),
-                        new TodayTool()
-                      },
-                      maxIterations);
+              agentExecutor = AgentExecutorFactory.createDefaultAgentExecutor(config, client);
           case "function" ->
               agentExecutor =
-                  new FunctionalAgentExecutor(
-                      client,
-                      new FunctionalTool[] {
-                        new FunctionalDuckDuckGo(config),
-                        new FunctionalWikipedia(config),
-                        new FunctionalCalculator()
-                      },
-                      maxIterations);
+                  FunctionalAgentExecutorFactory.createDefaultAgentExecutor(config, client);
           default -> {
             logger.info("Invalid agent type");
             printUsage(options, helper);
@@ -120,7 +91,6 @@ public class Main {
     if (args.length == 0) {
       System.out.println("Please provide a question as an argument in quotes");
       System.out.println("Example: java -jar <jar-file> \"Who is the UK prime minister?\"");
-      return;
     }
   }
 
@@ -144,14 +114,6 @@ public class Main {
                 String.format(
                     "sets the agent type. One of '%s', '%s' are the options",
                     AGENT_TYPE_DEFAULT, AGENT_TYPE_FUNCTION))
-            .build());
-    options.addOption(
-        Option.builder(MAX_ITERATIONS_OPTION)
-            .longOpt(MAX_ITERATIONS_LONG_OPTION)
-            .argName(MAX_ITERATIONS_LONG_OPTION)
-            .hasArg()
-            .required(false)
-            .desc("sets the maximum number of iterations, like e.g. 5")
             .build());
     options.addOption(
         Option.builder(PRINT_CONFIG_OPTION)

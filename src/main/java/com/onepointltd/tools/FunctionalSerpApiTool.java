@@ -7,5 +7,4 @@ public class FunctionalSerpApiTool extends SerpAPITool implements FunctionalAbst
   public FunctionalSerpApiTool(Config config) {
     super(config);
   }
-
 }

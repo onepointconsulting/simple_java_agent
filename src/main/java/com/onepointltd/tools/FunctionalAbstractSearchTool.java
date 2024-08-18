@@ -11,7 +11,7 @@ public interface FunctionalAbstractSearchTool extends Tool, FunctionalTool {
   public static final String SEARCH = "search";
 
   @Override
-  default public Function function() {
+  public default Function function() {
     Function function = new Function(name(), description());
     Parameters parameters =
         new Parameters(

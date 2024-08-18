@@ -1,7 +1,6 @@
 package com.onepointltd.agent;
 
 import static com.onepointltd.agent.AgentRunnerFunction.rungAgentGroqFunctional;
-import static com.onepointltd.agent.AgentRunnerFunction.rungAgentGroqSimple;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_EARTH_JUPITER_DIAMETERS;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_MATH_EQUATION;
 import static com.onepointltd.provider.QuestionProvider.QUESTION_NVIDIA_SHARE_PRICES;

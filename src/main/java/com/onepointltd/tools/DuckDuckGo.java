@@ -24,10 +24,13 @@ public class DuckDuckGo extends HttpTool {
     HttpClient client = buildHttpClient();
     String url = String.format("%s?q=%s", DUCKDUCKGO_ENDPOINT, encode(input));
     HttpRequest request = buildRequest(url, config);
-    return handleResponse(client, request, (responseBody) -> {
-      List<DuckDuckGoResult> results = DuckDuckGoExtractor.extract(responseBody);
-      return Serializer.toJson(results);
-    });
+    return handleResponse(
+        client,
+        request,
+        (responseBody) -> {
+          List<DuckDuckGoResult> results = DuckDuckGoExtractor.extract(responseBody);
+          return Serializer.toJson(results);
+        });
   }
 
   @Override
