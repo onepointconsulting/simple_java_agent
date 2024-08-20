@@ -8,6 +8,7 @@ import com.onepointltd.config.ClientFactory;
 import com.onepointltd.config.Config;
 import com.onepointltd.rest.config.AgentConfiguration;
 import com.onepointltd.rest.resource.AgentResource;
+import com.onepointltd.rest.resource.ApplicationHealthCheck;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
@@ -34,6 +35,7 @@ public class AgentApplication extends Application<AgentConfiguration> {
   @Override
   public void run(AgentConfiguration configuration, Environment environment) {
     var resource = new AgentResource(agentExecutor, functionalAgentExecutor);
+    environment.healthChecks().register("application", new ApplicationHealthCheck());
     environment.jersey().register(resource);
   }
 }

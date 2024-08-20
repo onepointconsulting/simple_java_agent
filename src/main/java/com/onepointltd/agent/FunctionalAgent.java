@@ -18,9 +18,7 @@ public class FunctionalAgent extends Agent {
     this.tools = tools;
   }
 
-  Message execute() {
-    Response response = super.client.completions(messages, tools);
-    Optional<Message> optionalMessage = MessageExtraction.extract(response);
-    return optionalMessage.orElse(new Message(Roles.ASSISTANT, "Failed to process your message"));
+  protected Response callClient() {
+    return super.client.completions(messages, tools);
   }
 }

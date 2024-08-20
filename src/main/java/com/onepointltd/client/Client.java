@@ -8,4 +8,6 @@ import java.util.List;
 public interface Client {
 
   Response completions(List<Message> messages, List<ToolField> tools);
+
+  String getEndpoint();
 }

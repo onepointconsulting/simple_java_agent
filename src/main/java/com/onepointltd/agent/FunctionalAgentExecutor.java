@@ -39,10 +39,12 @@ public class FunctionalAgentExecutor extends AgentExecutor {
     List<Function> functions =
         Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).toList();
     List<ToolField> tools = functions.stream().map(ToolField::new).toList();
-    return new FunctionalAgent(
+    FunctionalAgent functionalAgent = new FunctionalAgent(
         super.client,
         SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name(), true),
         tools);
+    messages = functionalAgent.getMessages();
+    return functionalAgent;
   }
 
   public String execute(String question) {

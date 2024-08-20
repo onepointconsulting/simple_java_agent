@@ -87,4 +87,8 @@ public abstract class AbstractClient implements Client {
       return String.format(TEMPLATE, config.getModelName(), messagesJson);
     }
   }
+
+  public String getEndpoint() {
+    return this.endpoint;
+  }
 }

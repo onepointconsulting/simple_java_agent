@@ -31,7 +31,7 @@ public class AgentResource {
     if (question == null || question.trim().isBlank()) {
       throw new IllegalArgumentException("Question parameter is required.");
     }
-    return new WebResponse(question, this.agentExecutor.execute(question), AgentType.PLAIN);
+    return new WebResponse(question, this.agentExecutor.execute(question), AgentType.PLAIN, this.agentExecutor.getEndpoint());
   }
 
   @POST
@@ -42,18 +42,25 @@ public class AgentResource {
         || webQuestion.getQuestion().trim().isBlank()) {
       throw new IllegalArgumentException("Question parameter is required.");
     }
+    String question = webQuestion.getQuestion();
     var agentType = webQuestion.getAgentType();
     return switch (agentType) {
-      case AgentType.FUNCTION ->
-          new WebResponse(
-              webQuestion.getQuestion(),
-              this.functionalAgentExecutor.execute(webQuestion.getQuestion()),
-              agentType);
-      case AgentType.PLAIN ->
-          new WebResponse(
-              webQuestion.getQuestion(),
-              this.agentExecutor.execute(webQuestion.getQuestion()),
-              agentType);
+      case AgentType.FUNCTION -> {
+        String answer = this.functionalAgentExecutor.execute(question);
+        yield new WebResponse(
+            question,
+            answer,
+            agentType, this.functionalAgentExecutor.getEndpoint())
+              .setMessages(webQuestion.getIncludeMessages() ? this.functionalAgentExecutor.getMessages() : null);
+      }
+      case AgentType.PLAIN -> {
+        String answer = this.agentExecutor.execute(question);
+        yield new WebResponse(
+            question,
+            answer,
+            agentType, this.agentExecutor.getEndpoint())
+            .setMessages(webQuestion.getIncludeMessages() ? this.functionalAgentExecutor.getMessages() : null);
+      }
       default -> throw new IllegalArgumentException("Invalid agent type: " + agentType);
     };
   }

@@ -9,14 +9,17 @@ public class WebQuestion {
 
   private String agentType;
 
+  private boolean includeMessages;
+
   public WebQuestion() {}
 
-  public WebQuestion(String question, String agentType) {
+  public WebQuestion(String question, String agentType, boolean includeMessages) {
     this.question = question;
     this.agentType =
         agentType == null
             ? AgentType.PLAIN
             : AgentType.AGENT_TYPES.contains(agentType) ? agentType : AgentType.PLAIN;
+    this.includeMessages = includeMessages;
   }
 
   @JsonProperty
@@ -27,5 +30,10 @@ public class WebQuestion {
   @JsonProperty
   public String getAgentType() {
     return agentType;
+  }
+
+  @JsonProperty
+  public boolean getIncludeMessages() {
+    return includeMessages;
   }
 }

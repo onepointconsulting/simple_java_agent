@@ -8,6 +8,7 @@ import com.onepointltd.model.ToolCall;
 import com.onepointltd.prompts.SystemMessageGenerator;
 import com.onepointltd.tools.Tool;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,6 +25,8 @@ public class AgentExecutor {
   final Client client;
 
   final int maxIterations;
+
+  protected List<Message> messages;
 
   public AgentExecutor(Client client, Tool[] tools, int maxIterations) {
     this.client = client;
@@ -50,6 +53,13 @@ public class AgentExecutor {
     } else {
       return Optional.empty();
     }
+  }
+
+  Agent initAgent() {
+    Agent agent = new Agent(
+        client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name(), false));
+    messages = agent.getMessages();
+    return agent;
   }
 
   public String execute(String question) {
@@ -100,8 +110,18 @@ public class AgentExecutor {
     return Arrays.stream(tools).filter(tool -> tool.name().equals(toolCall.toolName())).findFirst();
   }
 
-  Agent initAgent() {
-    return new Agent(
-        client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name(), false));
+  public Client getClient() {
+    return client;
+  }
+
+  public String getEndpoint() {
+    if(client == null) {
+      return null;
+    }
+    return client.getEndpoint();
+  }
+
+  public List<Message> getMessages() {
+    return messages;
   }
 }

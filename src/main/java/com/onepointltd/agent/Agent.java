@@ -40,8 +40,16 @@ public class Agent {
   }
 
   Message execute() {
-    Response response = this.client.completions(messages, null);
+    Response response = callClient();
     Optional<Message> optionalMessage = MessageExtraction.extract(response);
     return optionalMessage.orElse(new Message(Roles.ASSISTANT, "Failed to process your message"));
+  }
+
+  protected Response callClient() {
+    return this.client.completions(messages, null);
+  }
+
+  public List<Message> getMessages() {
+    return messages;
   }
 }
