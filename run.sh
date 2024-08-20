@@ -1,1 +1,1 @@
-java -jar ./build/libs/simple_agent-1.0-SNAPSHOT.jar -t function -m 10 -p "$1"
+java -jar ./build/libs/simple_agent-1.0-SNAPSHOT-all.jar -t function -p "$1"
