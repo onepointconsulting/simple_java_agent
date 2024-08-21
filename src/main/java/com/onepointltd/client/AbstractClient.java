@@ -9,6 +9,7 @@ import com.onepointltd.model.Response;
 import com.onepointltd.model.ResponseDeserializer;
 import com.onepointltd.model.Serializer;
 import com.onepointltd.model.ToolField;
+import com.onepointltd.tools.ToolChoice;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -41,6 +42,7 @@ public abstract class AbstractClient implements Client {
   "messages": %s,
   "stream": false,
   "tools": %s
+  %s
 }
       """;
 
@@ -82,7 +84,13 @@ public abstract class AbstractClient implements Client {
     String messagesJson = Serializer.toJson(messages).replaceAll("toolCalls", "tool_calls");
     if (tools != null && !tools.isEmpty()) {
       String toolsJson = Serializer.toJson(tools);
-      return String.format(FUNCTION_TEMPLATE, config.getModelName(), messagesJson, toolsJson);
+      if (tools.size() == 1) {
+        String toolsChoice = ToolChoice.serializeToolChoice(tools.get(0).function().getName());
+        logger.info("toolsChoice: " + toolsChoice);
+        return String.format(
+            FUNCTION_TEMPLATE, config.getModelName(), messagesJson, toolsJson, "," + toolsChoice);
+      }
+      return String.format(FUNCTION_TEMPLATE, config.getModelName(), messagesJson, toolsJson, "");
     } else {
       return String.format(TEMPLATE, config.getModelName(), messagesJson);
     }

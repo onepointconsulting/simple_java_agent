@@ -12,8 +12,13 @@ public class WebResponse extends WebQuestion {
 
   private List<Message> messages;
 
-  public WebResponse(String question, String answer, String agentType, String endpoint) {
-    super(question, agentType, false);
+  public WebResponse(
+      String question,
+      String answer,
+      String agentType,
+      String endpoint,
+      boolean structuredResponse) {
+    super(question, agentType, false, structuredResponse);
     this.answer = answer;
     this.endpoint = endpoint;
   }

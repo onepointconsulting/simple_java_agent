@@ -2,6 +2,7 @@ package com.onepointltd.rest.app;
 
 import com.onepointltd.agent.AgentExecutor;
 import com.onepointltd.agent.AgentExecutorFactory;
+import com.onepointltd.agent.FunctionalAgentExecutor;
 import com.onepointltd.agent.FunctionalAgentExecutorFactory;
 import com.onepointltd.client.Client;
 import com.onepointltd.config.ClientFactory;
@@ -17,7 +18,7 @@ public class AgentApplication extends Application<AgentConfiguration> {
 
   private AgentExecutor agentExecutor;
 
-  private AgentExecutor functionalAgentExecutor;
+  private FunctionalAgentExecutor functionalAgentExecutor;
 
   public static void main(String[] args) throws Exception {
     new AgentApplication().run(args);

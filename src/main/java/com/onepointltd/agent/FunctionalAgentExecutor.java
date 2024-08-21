@@ -3,15 +3,17 @@ package com.onepointltd.agent;
 import static com.onepointltd.config.Logging.logger;
 
 import com.onepointltd.client.Client;
-import com.onepointltd.model.Function;
 import com.onepointltd.model.Message;
+import com.onepointltd.model.MessageExtraction;
 import com.onepointltd.model.ResponseDeserializer;
 import com.onepointltd.model.ToolCall;
 import com.onepointltd.model.ToolField;
+import com.onepointltd.model.ToolFieldFactory;
 import com.onepointltd.prompts.SystemMessageGenerator;
 import com.onepointltd.tools.Calculator;
 import com.onepointltd.tools.DateFromTodayTool;
 import com.onepointltd.tools.DuckDuckGo;
+import com.onepointltd.tools.FunctionalAnswer;
 import com.onepointltd.tools.FunctionalCalculator;
 import com.onepointltd.tools.FunctionalDateFromTodayTool;
 import com.onepointltd.tools.FunctionalDuckDuckGo;
@@ -22,7 +24,6 @@ import com.onepointltd.tools.SerpAPITool;
 import com.onepointltd.tools.TodayTool;
 import com.onepointltd.tools.Tool;
 import com.onepointltd.tools.Wikipedia;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -36,18 +37,21 @@ public class FunctionalAgentExecutor extends AgentExecutor {
 
   @Override
   Agent initAgent() {
-    List<Function> functions =
-        Arrays.stream((FunctionalTool[]) super.tools).map(FunctionalTool::function).toList();
-    List<ToolField> tools = functions.stream().map(ToolField::new).toList();
-    FunctionalAgent functionalAgent = new FunctionalAgent(
-        super.client,
-        SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name(), true),
-        tools);
+    List<ToolField> tools = ToolFieldFactory.createTools((FunctionalTool[]) super.tools);
+    FunctionalAgent functionalAgent =
+        new FunctionalAgent(
+            super.client,
+            SystemMessageGenerator.generateSystemMessage(super.tools, super.tools[0].name(), true),
+            tools);
     messages = functionalAgent.getMessages();
     return functionalAgent;
   }
 
   public String execute(String question) {
+    return execute(question, false);
+  }
+
+  public String execute(String question, boolean structuredResponse) {
     Agent agent = initAgent();
     int iteration = 0;
     String[] nextPrompt = {question};
@@ -60,7 +64,15 @@ public class FunctionalAgentExecutor extends AgentExecutor {
       iteration++;
       if (toolCalls != null) {
         nextPrompt = extractToolCalls(toolCalls);
-      } else if (content.contains(ANSWER)) {
+      } else if (content.contains(ANSWER) || content.contains(ALT_ANSWER)) {
+        if (structuredResponse && agent instanceof FunctionalAgent) {
+          // Sending the message out in a structured format
+          ((FunctionalAgent) agent)
+              .setTools(
+                  ToolFieldFactory.createTools(new FunctionalTool[] {new FunctionalAnswer()}));
+          Message answer = agent.call(null, null);
+          return MessageExtraction.extractAnswer(answer.toolCalls());
+        }
         return content;
       } else {
         nextPrompt = new String[] {""};

@@ -1,8 +1,11 @@
 package com.onepointltd.model;
 
+import static com.onepointltd.config.Logging.logger;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
 
 public class MessageExtraction {
 
@@ -50,5 +53,20 @@ public class MessageExtraction {
       }
     }
     return Optional.empty();
+  }
+
+  @SuppressWarnings("unchecked")
+  public static String extractAnswer(List<Map<String, Object>> jsonNode) {
+    if (jsonNode == null || jsonNode.size() == 0) {
+      return "Failed to extract answer json";
+    }
+    try {
+      Map<String, Object> stringObjectMap = jsonNode.get(0);
+      Map<String, Object> function = (Map<String, Object>) stringObjectMap.get("function");
+      return function.get("arguments").toString();
+    } catch (Exception e) {
+      logger.log(Level.SEVERE, "Failed to parse answer json", e);
+      return "Failed to parse answer json";
+    }
   }
 }

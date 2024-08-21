@@ -11,15 +11,19 @@ public class WebQuestion {
 
   private boolean includeMessages;
 
+  private boolean structuredResponse;
+
   public WebQuestion() {}
 
-  public WebQuestion(String question, String agentType, boolean includeMessages) {
+  public WebQuestion(
+      String question, String agentType, boolean includeMessages, boolean structuredResponse) {
     this.question = question;
     this.agentType =
         agentType == null
             ? AgentType.PLAIN
             : AgentType.AGENT_TYPES.contains(agentType) ? agentType : AgentType.PLAIN;
     this.includeMessages = includeMessages;
+    this.structuredResponse = structuredResponse;
   }
 
   @JsonProperty
@@ -35,5 +39,10 @@ public class WebQuestion {
   @JsonProperty
   public boolean getIncludeMessages() {
     return includeMessages;
+  }
+
+  @JsonProperty
+  public boolean getStructuredResponse() {
+    return structuredResponse;
   }
 }

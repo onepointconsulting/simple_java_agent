@@ -18,7 +18,10 @@ public class AgentExecutor {
   public static final String PAUSE = "PAUSE";
 
   public static final String TOOL = "Tool";
+
   public static final String ANSWER = "Answer:";
+
+  public static final String ALT_ANSWER = "**Answer**";
 
   final Tool[] tools;
 
@@ -56,8 +59,9 @@ public class AgentExecutor {
   }
 
   Agent initAgent() {
-    Agent agent = new Agent(
-        client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name(), false));
+    Agent agent =
+        new Agent(
+            client, SystemMessageGenerator.generateSystemMessage(tools, tools[0].name(), false));
     messages = agent.getMessages();
     return agent;
   }
@@ -115,7 +119,7 @@ public class AgentExecutor {
   }
 
   public String getEndpoint() {
-    if(client == null) {
+    if (client == null) {
       return null;
     }
     return client.getEndpoint();

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface FunctionalAbstractSearchTool extends Tool, FunctionalTool {
 
-  public static final String SEARCH = "search";
+  String SEARCH = "search";
 
   @Override
   public default Function function() {

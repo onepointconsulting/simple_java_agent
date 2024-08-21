@@ -2,6 +2,7 @@ package com.onepointltd.rest.resource;
 
 import com.codahale.metrics.annotation.Timed;
 import com.onepointltd.agent.AgentExecutor;
+import com.onepointltd.agent.FunctionalAgentExecutor;
 import com.onepointltd.model.AgentType;
 import com.onepointltd.rest.model.WebQuestion;
 import com.onepointltd.rest.model.WebResponse;
@@ -18,9 +19,10 @@ public class AgentResource {
 
   private final AgentExecutor agentExecutor;
 
-  private final AgentExecutor functionalAgentExecutor;
+  private final FunctionalAgentExecutor functionalAgentExecutor;
 
-  public AgentResource(AgentExecutor agentExecutor, AgentExecutor functionalAgentExecutor) {
+  public AgentResource(
+      AgentExecutor agentExecutor, FunctionalAgentExecutor functionalAgentExecutor) {
     this.agentExecutor = agentExecutor;
     this.functionalAgentExecutor = functionalAgentExecutor;
   }
@@ -31,7 +33,12 @@ public class AgentResource {
     if (question == null || question.trim().isBlank()) {
       throw new IllegalArgumentException("Question parameter is required.");
     }
-    return new WebResponse(question, this.agentExecutor.execute(question), AgentType.PLAIN, this.agentExecutor.getEndpoint());
+    return new WebResponse(
+        question,
+        this.agentExecutor.execute(question),
+        AgentType.PLAIN,
+        this.agentExecutor.getEndpoint(),
+        false);
   }
 
   @POST
@@ -46,20 +53,26 @@ public class AgentResource {
     var agentType = webQuestion.getAgentType();
     return switch (agentType) {
       case AgentType.FUNCTION -> {
-        String answer = this.functionalAgentExecutor.execute(question);
+        String answer =
+            this.functionalAgentExecutor.execute(question, webQuestion.getStructuredResponse());
         yield new WebResponse(
-            question,
-            answer,
-            agentType, this.functionalAgentExecutor.getEndpoint())
-              .setMessages(webQuestion.getIncludeMessages() ? this.functionalAgentExecutor.getMessages() : null);
+                question,
+                answer,
+                agentType,
+                this.functionalAgentExecutor.getEndpoint(),
+                webQuestion.getStructuredResponse())
+            .setMessages(
+                webQuestion.getIncludeMessages()
+                    ? this.functionalAgentExecutor.getMessages()
+                    : null);
       }
       case AgentType.PLAIN -> {
         String answer = this.agentExecutor.execute(question);
-        yield new WebResponse(
-            question,
-            answer,
-            agentType, this.agentExecutor.getEndpoint())
-            .setMessages(webQuestion.getIncludeMessages() ? this.functionalAgentExecutor.getMessages() : null);
+        yield new WebResponse(question, answer, agentType, this.agentExecutor.getEndpoint(), false)
+            .setMessages(
+                webQuestion.getIncludeMessages()
+                    ? this.functionalAgentExecutor.getMessages()
+                    : null);
       }
       default -> throw new IllegalArgumentException("Invalid agent type: " + agentType);
     };

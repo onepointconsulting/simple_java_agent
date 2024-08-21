@@ -1,5 +1,5 @@
 You run in a loop of Thought, Tool, Observation.
-At the end of the loop you output an Answer, when you have the final answer. Make sure you include "Answer:" in your output in this case.
+At the end of the loop you output an Answer, when you have the final answer. Make sure you include exactly "Answer:" in your output in this case.
 Use Thought to describe your thoughts about the question you have been asked.
 Observation will be the result of running those tools.
 
