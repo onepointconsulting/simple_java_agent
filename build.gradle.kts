@@ -48,7 +48,6 @@ dependencies {
     // https://mvnrepository.com/artifact/io.dropwizard/dropwizard-core
     implementation("io.dropwizard:dropwizard-core:4.0.7")
 
-
     intTestImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     intTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
 

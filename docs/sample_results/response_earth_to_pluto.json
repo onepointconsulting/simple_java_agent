@@ -1,0 +1,117 @@
+{
+  "question": "Which is the distance of Pluto from the Earth in Kilometers and how long would you travel from Earth to Pluto at light speed?",
+  "agentType": "function",
+  "includeMessages": false,
+  "structuredResponse": true,
+  "endpoint": "https://api.openai.com/v1/chat/completions",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You run in a loop of Thought, Tool, Observation.\r\nAt the end of the loop you output an Answer, when you have the final answer. Make sure you include exactly \"Answer:\" in your output in this case.\r\nUse Thought to describe your thoughts about the question you have been asked.\r\nObservation will be the result of running those tools.\r\n\r\nMake sure that you perform one step at a time and wait for the next step to be called.\r\nIf you output a Thought, you should not output a Tool or an Answer after that.\r\n\r\nYour available tools are:\r\n\r\nduckduckgo:\ne.g. duckduckgo: weather tomorrow in London\nReturns the result of a DuckDuckGo search.\n\nwikipedia:\ne.g. wikipedia: Albert Einstein\nReturns the Wikipedia page summary for the given search term. Useful for retrieval of historical information.\n\ncalculator:\ne.g. calculator: The result is 4\nCalculator tool to perform arithmetic operations for expressions like 2+2, 3*4, 5*6/2, etc. The calculator accepts no text like `kilometers` or `meters` as input. It only accepts arithmetic expressions.\n\ntoday:\ne.g. Today: 2021-10-01\nThis tool gives you today's date in the format YYYY-MM-DD.\n\nDate_from_today:\ne.g. Date_from_today: 2024-10-01\nThis tool gives you the date that is a certain number of days from today in the format YYYY-MM-DD. It expects a number as input.\r\n\r\nAlways look things up on duckduckgo if you have the opportunity to do so.\r\n\r\nExample session 1:\r\n\r\nQuestion: What is the capital of France?\r\nThought: I should look up France on Wikipedia.\r\nTool: wikipedia: France\r\n\r\nYou will be called again with this:\r\n\r\nObservation: France is a country. The capital is Paris.\r\n\r\nYou then output:\r\n\r\nAnswer: The capital of France is Paris\r\n\r\n====================================\r\n\r\nExample session 2:\r\n\r\nQuestion: Who is the current president of the United States?\r\nThought: I should look up the current president of the United States on duckduckgo.\r\nTool: duckduckgo: current president of the United States\r\n\r\nYou will be called again with this:\r\n\r\nObservation: Joe biden elected president of the United States in 2024.\r\n\r\nYou then output:\r\n\r\nAnswer: Joe biden is the current president of the United States\r\n\r\n====================================\r\n\r\nExample session 3:\r\n\r\nQuestion: What is the result of this expression \"2 * 3 + 4 / 2 * 10 + 12 / 32\"?\r\nThought: I should calculate using the calculator tool.\r\nTool: calculator: 2 * 3 + 4 / 2 * 10 + 12 / 32\r\n\r\nYou will be called again with this:\r\n\r\nObservation: 26.375\r\n\r\nYou then output:\r\n\r\nAnswer: The result of \"2 * 3 + 4 / 2 * 10 + 12 / 32\" is 26.375\r\n\r\n====================================\r\n\r\nExample session 4:\r\n\r\nQuestion: What are the betting sites predicting on the American Presidential Election? Who is going to win according to them?\r\nThought: I should look up the current president of the United States on serp_api_tool.\r\nTool: serp_api_tool: American Presidential Election betting odds\r\n\r\nYou will be called again with this:\r\n\r\nObservation: Donald Trump has a 48% per cent chance of winning against Kamala Harris with a 51% chance.\r\n\r\nYou then output:\r\n\r\nAnswer: Joe biden is the current president of the United States",
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": null
+    },
+    {
+      "role": "user",
+      "content": "Which is the distance of Pluto from the Earth in Kilometers and how long would you travel from Earth to Pluto at light speed?",
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": "Thought: To determine the distance of Pluto from Earth, I should first find the average distance between Pluto and Earth. Then, I'll calculate the time it would take to travel this distance at the speed of light.\n\nI'll start by looking up the average distance from Earth to Pluto in kilometers.\n\nTool: functions.duckduckgo\nParameters: { search: \"average distance from Earth to Pluto in kilometers\" }",
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": [
+        {
+          "id": "call_Y9v9WSitqnDXfk0mBhKAeGpw",
+          "type": "function",
+          "function": {
+            "name": "duckduckgo",
+            "arguments": "{\"search\":\"average distance from Earth to Pluto in kilometers\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "Observation: [{\"title\":\"How Far is Pluto From Earth? | Time Taken, KM & Distance - The Nine Planets\",\"url\":\"nineplanets.org/questions/how-far-is-pluto-from-earth/\",\"snippet\":\"The closest approach of Pluto to Earth is when the dwarf planet is at only 4.28 billion km / 2.66 billion mi from us. This is when Pluto is closer to the Sun than even Neptune. On average, though, Pluto is 5.05 billion km / 3.1 billion mi away from Earth. This is all due to Pluto's highly eccentric orbit, which takes it from 30 to 49 AU away ...\"},{\"title\":\"How Far Away is Pluto? | Space\",\"url\":\"www.space.com/18566-pluto-distance.html\",\"snippet\":\"Pluto's distance from the sun — and the distance from Earth to Pluto — changes because of the dwarf planet's odd orbit. Sometimes, Pluto is closer than Neptune. ... (12,500 kilometers) of ...\"},{\"title\":\"Pluto: Facts - NASA Science\",\"url\":\"science.nasa.gov/dwarf-planets/pluto/facts/\",\"snippet\":\"Pluto's 248-year-long, oval-shaped orbit can take it as far as 49.3 astronomical units (AU) from the Sun, and as close as 30 AU. (One AU is the mean distance between Earth and the Sun: about 93 million miles or 150 million kilometers.) But on average, Pluto is 3.7 billion miles (5.9 billion kilometers) away from the Sun, or 39 AU.\"},{\"title\":\"Pluto Fact Sheet - NSSDCA\",\"url\":\"nssdc.gsfc.nasa.gov/planetary/factsheet/plutofact.html\",\"snippet\":\"Pluto Observational Parameters Discoverer: Clyde Tombaugh Discovery Date: 18 February 1930 Distance from Earth Minimum (10 6 km) 4284.7 Maximum (10 6 km) 7528.0 Apparent diameter from Earth Maximum (seconds of arc) 0.11 Minimum (seconds of arc) 0.06 Mean values at opposition from Earth Distance from Earth (10 6 km) 5756.78 Apparent diameter (seconds of arc) 0.08 Apparent visual magnitude 15.1 ...\"},{\"title\":\"In Depth | Pluto - NASA Solar System Exploration\",\"url\":\"solarsystem.nasa.gov/planets/dwarf-planets/pluto/in-depth.amp\",\"snippet\":\"Pluto's 248-year-long, oval-shaped orbit can take it as far as 49.3 astronomical units (AU) from the Sun, and as close as 30 AU. (One AU is the mean distance between Earth and the Sun: about 93 million miles or 150 million kilometers.) But on average, Pluto is 3.7 billion miles (5.9 billion kilometers) away from the Sun, or 39 AU.\"},{\"title\":\"How far is Pluto from Earth? - eightplanets.org\",\"url\":\"eightplanets.org/blog/how-far-is-pluto-from-earth\",\"snippet\":\"The average distance from the Earth to Pluto is about 3.67 billion miles (5.9 billion kilometers). To put that in perspective, consider this: if you were to drive your car to Pluto at a steady 60 miles per hour (97 kilometers per hour), it would take you about 67,000 years to get there.\"},{\"title\":\"How Far Away Is Dwarf Planet Pluto? - TheSkyLive\",\"url\":\"theskylive.com/how-far-is-pluto\",\"snippet\":\"The distance of Dwarf Planet Pluto from Earth is currently 5,110,164,129 kilometers, equivalent to 34.159337 Astronomical Units. Light takes 4 hours, 44 minutes and 5.6727 seconds to travel from Dwarf Planet Pluto and arrive to us.\"},{\"title\":\"Distance From Earth To Pluto: How Far Is Pluto From Earth? - Science ABC\",\"url\":\"www.scienceabc.com/nature/universe/how-far-is-pluto-from-earth.html\",\"snippet\":\"Pluto is an astounding 4.78 billion kilometers at perihelion and 7.5 billion kilometers at aphelion from Earth, a distance so huge that it is incomprehensible for our minds. To give you a reference, Sun is 1.391 million km in diameter, meaning that you could easily fit 5,400 monstrous Suns between Earth and Pluto at their furthest distance apart.\"},{\"title\":\"Distance to Pluto - Universe Today\",\"url\":\"www.universetoday.com/13891/distance-to-pluto/\",\"snippet\":\"Pluto's average distance from the Sun is 40 astronomical units (5.91 billion km or 3.67 billion miles). Distance From Earth to Pluto. The Earth is only 1 AU from the Sun. When the Earth and ...\"},{\"title\":\"Pluto's Distance From Earth: Measuring The Vastness Of Space\",\"url\":\"physicspedia.blog/plutos-distance-from-earth/\",\"snippet\":\"Pluto's distance from Earth is vast, necessitating light-years as the unit of measurement. A light-year is the distance light travels in one year, approximately 9.46 trillion kilometers. The journey of light from Pluto to Earth takes about 5.3 hours, translating to a distance of approximately 0.00037 light-years or 36 astronomical units (AU). The Vastness of...\"},{\"title\":\"Pluto - Wikipedia\",\"url\":\"en.wikipedia.org/wiki/Pluto\",\"snippet\":\"This gives Pluto an escape velocity of 4,363.2 km per hour / 2,711.167 miles per hour (as compared to Earth's 40,270 km per hour / 25,020 miles per hour). Pluto is more than twice the diameter and a dozen times the mass of Ceres, the largest object in the asteroid belt.\"},{\"title\":\"Distance Between Planets Of The Solar System | KM & Current Distance\",\"url\":\"nineplanets.org/distance-between-planets/\",\"snippet\":\"Pluto; Haumea; Makemake; Eris; Solar System. The Sun; The Moon; Moon Phases ... column is the average distance between Earth and the Sun and is the most common way for scientists to measure distance in our Solar System. Below is a table of the distances between each of the planets in our solar system. From To AU KM MILES; Uranus: Neptune: 10.88 ...\"},{\"title\":\"Pluto | Size, Moons, Temperature, & Facts | Britannica\",\"url\":\"www.britannica.com/place/Pluto-dwarf-planet\",\"snippet\":\"Pluto's mean distance from the Sun, about 5.9 billion km (3.7 billion miles or 39.5 astronomical units), gives it an orbit larger than that of the outermost planet, Neptune. (One astronomical unit [AU] is the average distance from Earth to the Sun—about 150 million km [93 million miles].) Its orbit, compared with those of the planets, is atypical in several ways.\"},{\"title\":\"New Horizons : The Pluto System\",\"url\":\"pluto.jhuapl.edu/Pluto/The-Pluto-System.php\",\"snippet\":\"Pluto; Average Distance from Sun: 39.482 au 5.9 billion km 3.7 billion miles: Minimum Distance from Sun: 29.658 au 4.4 billion km 2.8 billion miles: Maximum Distance from Sun: 49.305 au 7.4 billion km 4.6 billion miles: Orbit period around Sun. 248 years: Surface temperature -396 to -360 Fahrenheit-238 to -218 Celsius 35-55 Kelvin\"},{\"title\":\"Pluto - WorldAtlas\",\"url\":\"www.worldatlas.com/space/pluto.html\",\"snippet\":\"Pluto. Pluto is one of the smallest and farthest worlds from the sun, having a diameter of 2,376 kilometers and an average distance from the sun of 3.7 billion miles (5.9 billion kilometers). Pluto was first discovered in 1930 by the astronomer Clyde Tombaugh, and until 2006, it was believed to be the ninth planet in the solar system.\"},{\"title\":\"How Big Is Pluto | What Does Pluto Look Like - Star Walk\",\"url\":\"starwalk.space/en/news/facts-about-pluto\",\"snippet\":\"On average, Pluto is located 39.5 AU from the Sun, which equals 5.9 billion kilometers (3.7 billion miles). It is almost forty times farther away from the Sun than the Earth is. Pluto is so far away that the Sun's light, which travels about 300,000 kilometers (186,000 miles) per second, takes more than five hours to reach the dwarf planet.\"},{\"title\":\"Pluto Size, Composition, Distance from Sun & Moons\",\"url\":\"space-facts.com/pluto-information-infographic/\",\"snippet\":\"Distance from Sun: Pluto's orbit takes it between 4.4 billion km (29.7 AU) at its closest point and 7.3 billion km (48.9 AU) from the Sun with an average distance of 5.9 billion km (39.3 AU). 1 Astronomical Unit (AU) = 149,597,871 km, the average distance of the Earth from the Sun. Moons: Pluto has five moons, in order of size they are Charon ...\"},{\"title\":\"NASA's Three-Billion-Mile Journey to Pluto Reaches Historic Encounter\",\"url\":\"www.nasa.gov/news-release/nasas-three-billion-mile-journey-to-pluto-reaches-historic-encounter/\",\"snippet\":\"New Horizons' almost 10-year, three-billion-mile journey to closest approach at Pluto took about one minute less than predicted when the craft was launched in January 2006. The spacecraft threaded the needle through a 36-by-57 mile (60 by 90 kilometers) window in space — the equivalent of a commercial airliner arriving no more off target ...\"},{\"title\":\"What Is Pluto? (Grades 5-8) - NASA\",\"url\":\"www.nasa.gov/learning-resources/for-kids-and-students/what-is-pluto-grades-5-8/\",\"snippet\":\"On average, Pluto is a distance of 39.5 astronomical units, or AU, from the sun. That is almost 40 times farther from the sun than Earth is. Because of its elliptical orbit, Pluto is not the same distance from the sun all the time. Pluto's closest point to the sun is 29.7 AU. Getting this close means that Pluto sometimes crosses Neptune's path.\"},{\"title\":\"Planet Sizes and Locations in Our Solar System - NASA Science\",\"url\":\"science.nasa.gov/solar-system/planet-sizes-and-locations-in-our-solar-system/\",\"snippet\":\"Pluto has an equatorial diameter of about 1,477 miles (2,377 kilometers). Pluto is about 1/5th the width of Earth. Pluto orbits the Sun at a distance of about 3.67 billion miles (5.9 billion kilometers), or about 39 times farther away than Earth from the Sun. Explore Pluto\"},{\"title\":\"Astronomical Unit: How far away is the sun? | Space\",\"url\":\"www.space.com/17081-how-far-is-earth-from-the-sun.html\",\"snippet\":\"Earth's distance from the sun averages about 93 million miles (150 million km), which scientists also call one astronomical unit (1 AU). ... Pluto (dwarf planet, average) 39.5: Row 8 - Cell 2 :\"},{\"title\":\"Pluto's Distance from the Sun - Universe Today\",\"url\":\"www.universetoday.com/44534/plutos-distance-from-the-sun/\",\"snippet\":\"Keep in mind that this distance is an average. Pluto follows a highly elliptical orbit around the Sun. ... is the average distance from the Earth to the Sun - about 150 million km. Pluto's ...\"},{\"title\":\"How far is Pluto from the Sun? | Cool Cosmos\",\"url\":\"coolcosmos.ipac.caltech.edu/ask/152-How-far-is-Pluto-from-the-Sun-\",\"snippet\":\"Pluto's average distance from the Sun is 3,670,050,000 miles (5,906,380,000 kilometers). Because Pluto has an orbit that is very elliptical, there is a big difference between its closest distance to the sun and its farthest distance from the Sun. The closest Pluto gets to the Sun is 2,756,902,000 miles or 4,436,820,000 kilometers. The farthest ...\"}]",
+      "functionCall": null,
+      "tool_call_id": "call_Y9v9WSitqnDXfk0mBhKAeGpw",
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": "Observation: The average distance between Earth and Pluto is approximately 5.9 billion kilometers according to multiple sources.\n\nThought: Now, I need to calculate the time it would take to travel this distance at the speed of light. The speed of light in a vacuum is approximately \\(299,792\\) kilometers per second (\\(km/s\\)).\n\nTo find the travel time, I'll use the formula:\n\\[ \\text{Time} = \\frac{\\text{Distance}}{\\text{Speed}} \\]\n\nWhere:\n- Distance = 5.9 billion \\(km\\)\n- Speed = 299,792 \\(km/s\\)\n\nI'll use the calculator to find out the travel time.\n\nTool: functions.calculator\nParameters: { expression: \"5900000000 / 299792\" }",
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": [
+        {
+          "id": "call_6MnGFn4evcFXQkS4j4ja5q3X",
+          "type": "function",
+          "function": {
+            "name": "calculator",
+            "arguments": "{\"expression\":\"5900000000 / 299792\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "content": "Observation: The result is 19680.311682766718257992207930832043550194801729198911245129956770027",
+      "functionCall": null,
+      "tool_call_id": "call_6MnGFn4evcFXQkS4j4ja5q3X",
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": "Answer: The average distance of Pluto from Earth is approximately 5.9 billion kilometers. Traveling from Earth to Pluto at the speed of light would take approximately 19,680 seconds, which is about 5.47 hours.",
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": null
+    },
+    {
+      "role": "assistant",
+      "content": null,
+      "functionCall": null,
+      "tool_call_id": null,
+      "toolCalls": [
+        {
+          "id": "call_keEQpDB3NVGb6PFFCM3RZZVL",
+          "type": "function",
+          "function": {
+            "name": "Answer",
+            "arguments": "{\"answer\":\"The average distance of Pluto from Earth is approximately 5.9 billion kilometers. Traveling from Earth to Pluto at the speed of light would take approximately 19,680 seconds, which is about 5.47 hours.\",\"keywords\":[\"Pluto distance from Earth\",\"light speed travel time\",\"average distance\",\"5.9 billion kilometers\",\"19,680 seconds\",\"5.47 hours\"]}"
+          }
+        }
+      ]
+    }
+  ],
+  "structuredAnswer": {
+    "answer": "The average distance of Pluto from Earth is approximately 5.9 billion kilometers. Traveling from Earth to Pluto at the speed of light would take approximately 19,680 seconds, which is about 5.47 hours.",
+    "keywords": [
+      "Pluto distance from Earth",
+      "light speed travel time",
+      "average distance",
+      "5.9 billion kilometers",
+      "19,680 seconds",
+      "5.47 hours"
+    ]
+  }
+}

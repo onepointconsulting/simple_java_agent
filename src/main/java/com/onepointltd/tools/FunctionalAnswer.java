@@ -18,6 +18,8 @@ public class FunctionalAnswer extends AbstractTool implements FunctionalTool {
 
   private static final String KEYWORDS = "keywords";
 
+  private static final String URLS = "urls";
+
   @Override
   public String execute(String input) {
     return input;
@@ -53,7 +55,10 @@ public class FunctionalAnswer extends AbstractTool implements FunctionalTool {
                     "The reasoning behind the answer related to the observations", "string"),
                 KEYWORDS,
                 new PropertyValue(
-                    "The keywords related to the answer", "array", new Items("string"))),
+                    "The keywords related to the answer", "array", new Items("string")),
+                URLS,
+                new PropertyValue(
+                    "URLs relevant to this question", "array", new Items("string"))),
             List.of(ANSWER, KEYWORDS));
     function.setParameters(parameters);
     return function;
